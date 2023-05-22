@@ -4,7 +4,7 @@
   <title><![CDATA[Jack's Ship]]></title>
   <link href="http://wejaq.cn/atom.xml" rel="self"/>
   <link href="http://wejaq.cn/"/>
-  <updated>2023-05-20T16:06:54+02:00</updated>
+  <updated>2023-05-22T23:25:41+02:00</updated>
   <id>http://wejaq.cn/</id>
   <author>
     <name><![CDATA[Jack]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    
+    <title type="html"><![CDATA[test for new repo]]></title>
+    <link href="http://wejaq.cn/blog/2023/05/22/test-for-new-repo/"/>
+    
+    <updated>2023-05-22T23:24:19+02:00</updated>
+    <id>http://wejaq.cn/blog/2023/05/22/test-for-new-repo</id>
+    
+    <content type="html"><![CDATA[<p>test for new deploy with resync to own server.</p>
+]]></content>
+    
+  </entry>
   
   <entry>
     
