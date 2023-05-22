@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Smart Messager - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="Smart Messager Reference: https://www.necplatforms.co.jp/solution/smartmessenger/ Smart Messager is a voice message deliver system. Front-end system &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/smartmessager">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Smart Messager</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-17T22:52:00+01:00" pubdate data-updated="true"></time></p>
+  </header>
+  
+  <p>Reference: <a href="https://www.necplatforms.co.jp/solution/smartmessenger/">https://www.necplatforms.co.jp/solution/smartmessenger/</a></p>
+
+<p>Smart Messager is a voice message deliver system. Front-end system is created by ASP.Net and C# which visualize the status of message calling, sending message and other management functions. Back-end system includes a calling controlling server, SIP proxy server and other modules. Both sides communicates by WCF service.</p>
+
+<p><img src="/images/smartmessage.png"></p>
+
+<p>Shown as the figure, the client includes two types, web and phone. The server includes a phone calling management system which setup a SIP proxy server monitoring a port to waiting SIP request from client phones, and then routes the phone requests to the related functions by a script. Meanwhile server also includes some WCF services which offers functions for web clients. From another side, the system sending voice messages to the target phones through PBX by SIP/RTP. And update the status of calling to the data files(xml files).</p>
+
+<p>The chanllege work of the project is to send message to many target phones(100+ phones) at mean time and make sure that every message send and receive sucessfully, and then update the real-time status of calling by AJAX on the web client. The whole system design is also chanllegable, the requirements change a lot during the development, so the design need big flexibility to expand new requirements.</p>
+
+<p>For me, this project is a very important, it give me a chance to implement a production application with some intresting devices: ip-phone, voip router and pbx. And I almost take part in every part of the development and learn lots about programming with mixed languages with C#, C++/cli, naitve C++ and some c/c++ opensource library, although we meet lots of compiling and linking problems.</p>
+
+<p><img src="/images/1.png">
+The photo was shoted when we finished all the work in the lab in Tokyo.</p>
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-17T22:52:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1253 @@
+;**********************************************************************************
+;*										  
+;*	  User Name 	: Renesas R8C Main Program
+;*										  
+;*	  System Name	: TPMS RECEIVE
+;*										  
+;*	  Function 	: Main Program						  
+;*										  
+;*	  CPU		: R8C/29						  
+;*										 
+;*	  Last Update	: 2007-08-26	19:40					 
+;*										  
+;*	  File Name	: SerialPort.a30							  
+;*										 
+;*				 Copyright USST.				  
+;**********************************************************************************
+	;+----------------------------------------------+
+	;|	include files								|
+	;+----------------------------------------------+
+
+						.include sfr_r829.inc
+			
+	;+----------------------------------------------+
+	;|	base infomation								|
+	;+----------------------------------------------+
+		ramtop			.equ 000400h			;ram start address
+		ramend			.equ 0007ffh			;ram end address
+		istack			.equ 000800h			;isp start address
+		romtop			.equ 00c000h			;rom start address
+		var_vector 		.equ 00fe00h			;vector list address
+		fix_vector 		.equ 00ffdch			;fix vector list address
+		flashblock_a	.equ 002400h			;flash block a start
+		flashblock_b	.equ 002800h			;flash block b start
+		flashadd		.equ	2400h
+	
+	;+----------------------------------------------+
+	;|	some flags									|
+	;+----------------------------------------------+
+flag1			.equ		000400h
+leadcode0		.btequ		0,flag1			;引导码收到足够个数1
+cardata			.btequ		1,flag1			;是否开始收GE数据
+GE_man_update	.btequ		2,flag1			;未拼装成曼码的GE数据有更新
+IsLeft			.btequ		3,flag1			;是曼码的左半个数据
+GE_bit			.btequ		4,flag1			;拼装成曼码的值
+Serial_update	.btequ		5,flag1			;串口发送数据有更新
+
+flag2				.equ	000401h
+uart_tire			.btequ  0,flag2
+uart_rec			.btequ 	1,flag2
+bccright			.btequ	2,flag2
+serialbusy			.btequ	3,flag2
+flashDataOK			.btequ	4,flag2
+
+flag3				.equ	402h
+ackf				.btequ	0,flag3
+nakf				.btequ	1,flag3
+setupf				.btequ	2,flag3
+enqf				.btequ	3,flag3
+eotf				.btequ	4,flag3
+errorf				.btequ	5,flag3
+
+alarm				.equ	000403h
+alarm0				.btequ	0,alarm				;电压低
+alarm1				.btequ	1,alarm				;慢漏（未完成）
+alarm2				.btequ	2,alarm				;快漏（未完成）
+alarm3				.btequ	3,alarm				;低压
+alarm4				.btequ	4,alarm				;高压
+alarm5				.btequ	5,alarm				;超高温			
+alarm6				.btequ	6,alarm				;高温
+alarm7				.btequ	7,alarm				;异常
+
+
+;+----------------------------------------------------------------------------------------------------+	
+		
+						.page 'ram'
+						.section memory,data				;ram info definate
+						.org 	ramtop+4
+	;+----------------------------------------------+
+	;|	RAM area allocation							|
+	;+----------------------------------------------+
+	
+transnum:		.blkb	1
+	
+model:			.blkb	1
+bcc:			.blkb	1
+bccnum:			.blkb	1
+time1:			.blkb	1
+
+sendadd:		.blkw	1
+sendnum:		.blkb	1
+
+;轮胎数据相关变量
+carSender:		.blkb	2
+Tires_ID1:		.blkb	7					;轮胎1ID
+Tires_ID2:		.blkb	7					;轮胎1ID
+Tires_ID3:		.blkb	7					;轮胎1ID
+Tires_ID4:		.blkb	7					;轮胎1ID
+carSenderend:	.blkb	2
+
+ACK:			.blkb	5
+NAK:			.blkb	5
+ENQ:			.blkb	5
+EOT:			.blkb	5
+
+receivenum:		.blkb	1
+receivedata:	.blkb	30
+receiveadd:		.blkw	1
+lastadd:		.blkw	1
+
+setupinfo:		.blkb	20
+tempdata:		.blkb	1
+
+;报警相关变量
+High_t:			.blkb	1					;高温报警值(000479h)
+More_Hight_t:	.blkb	1					;超高温报警值
+Low_p:			.blkb	1					;低压报警值
+High_p:			.blkb	1					;高压报警值
+Temp_a:			.blkb	1					;压力报警暂存
+
+;GE数据相关变量
+RA_pretect:		.blkw	1					;ra保护
+GE_change:		.blkb	1					;沿变化当前值
+GE_lead_num:	.blkb	1					;引导码沿变化计数
+GE_compare:		.blkb	1					;沿变化比较值
+RA_count:		.blkb	1					;沿变化所需中断计数
+temp:			.blkb	1					;RA_count暂存
+GE_bit_num:		.blkb	1					;曼码拼装比特计数
+GE_tire_addr:	.blkw	1					;存储GE_tire_data的地址
+GE_tire_data:	.blkb	10					;曼码拼装后GE轮胎数据(预留一字节防止变量冲突)
+GE_par:			.blkb	1					;与GE数据校验位比较
+GE_par_num:		.blkb	1					;GE数据校验技术
+GE_RA_data:		.blkb	1					;GE数据沿变化中断次数
+		
+;+----------------------------------------------------------------------------------------------------+	
+						.section block_a,romdata
+						.org	flashblock_a
+	;+----------------------------------------------+
+	;|	flash block a area allocation				|
+	;+----------------------------------------------+
+
+						.section block_b,romdata
+						.org	flashblock_b
+	;+----------------------------------------------+
+	;|	flash block b area allocation				|
+	;+----------------------------------------------+
+		
+;+----------------------------------------------------------------------------------------------------+	
+;=====================================================================
+; ID code & Option function select register
+;---------------------------------------------------------------------
+; ID code check function
+		.id "#00013764049630"
+
+; option function select register
+		.ofsreg	0FBH
+		
+		
+
+						.section prom,code					;code section start
+						.org 	romtop
+						.optj	off
+		
+						.fb	ramtop													;
+						.sb	ramtop+80h
+							
+							
+							
+		
+	;+----------------------------------------------+
+	;|	Program Start								|
+	;+----------------------------------------------+
+
+reset:
+	NOP
+	NOP
+	NOP
+	fclr i						;interrupt off
+	;+----------------------------------------------+
+	;|	Ordinery Register Init						|
+	;+----------------------------------------------+
+
+OrdRes_Init:					;ordinery register init
+	ldc	#ramtop,fb				;set fb
+	ldc	#ramtop+80H,sb			;set sb
+	ldc	#istack,isp				;set isp
+	ldintb	#var_vector			;set intb
+	
+
+	;+----------------------------------------------+
+	;|	CPU INIT									|
+	;+----------------------------------------------+
+
+CPU_Init:
+	bset	prc0				;protect off
+	bclr	cm14				;select low-speed on-chip oscillator
+	mov.b	#00000000b,fra2		;high-speed on-chip oscillator clock:f2 20M
+	bset	fra00				;start high-speed on-chip oscillator							
+	mov.w	#0ffh,R3			;wait until oscillator stabilizes
+
+Delay:
+	adjnz.w	#-1,R3,Delay
+	bset	fra01				;select high-speed on-chip oscillator
+	bclr	cm16				;no system clock division
+	bclr	cm17
+	bclr	cm06				;enable cm16,cm17
+	bclr	prc0				;protect on
+	
+	;+----------------------------------------------+
+	;|	I/O Init									|
+	;+----------------------------------------------+
+
+IO_Init:
+	mov.b	#00000000b,pd1		;set p1 input
+	bset	pd1_3				;output
+	bset	pd1_1				;output
+	bset	pd1_0
+	bset	pd3_3				;set p3_3,p3_4,p3_5,p3_7,p4_5 input
+	bclr	pd3_4				
+	bclr	pd3_5
+	bclr	pd3_7
+	bclr	pd4_5
+	mov.b	#00000000b,p1		;set all bit of p1 0
+	bclr	p3_3				;set p3_3,p3_4,p3_5,p3_7,p4_5,p4_6,p4_7 0
+	bclr	p3_4
+	bclr	p3_5
+	bclr	p3_7
+	bclr	p4_2
+	bclr	p4_5
+	bclr	p4_6
+	bclr	p4_7
+	mov.b	#10001000b,pur0		;set p1,p3 up-pull resistance	
+	mov.b	#00000010b,pur1		;set p4_5 up-pull resistance
+	mov.b	#00000000b,p1drr	;set p1 low drive
+	bset	p1_3
+	bset	p1_0
+	bset	p1_1
+	bset	p3_3
+	
+	
+	;+----------------------------------------------+
+	;|	Clear Ram									|
+	;+----------------------------------------------+
+	
+Ram_Clear:								;clear ram info
+	mov.w	#0,r0						;set r0 0
+	mov.w	#((ramend+1)-ramtop)/2,R3	;set the lenght of ram to r3
+	mov.w	#ramtop,a1					;set ram start adress to a1
+	sstr.w
+	
+	;+----------------------------------------------+
+	;|	Timer RA Init								|
+	;+----------------------------------------------+
+	
+TRA_Init:									;use for receive data from ge
+	bclr	tstart_tracr
+	bclr	tedgf_tracr
+	bclr	tundf_tracr
+	mov.b	#00000000b,traioc
+	mov.b	#00000000b,tramr
+	mov.b	#019,trapre
+	mov.b	#029,tra
+	mov.b	#00000111b,traic				;interupt
+	
+	;+----------------------------------------------+
+	;|	uart INIT									|
+	;+----------------------------------------------+
+
+SerialPort_Init:
+	bclr	pd1_5				;p1_5	input,rxd0
+	bclr	pd1_4				;p1_4	input,txd0
+	mov.b	#00000101b,u0mr		;8 bit,1 stop bit,no parity bit
+	mov.b	#00000000b,u0c0		;f1,set txd0 output,lsb first
+	mov.b	#00000000b,u0c1		;disable t/r/continue r,interrupt source:t buffer empty
+	mov.b	#81h,u0brg			;bit rate:9600bps
+	mov.b	#00000100b,s0tic	;transmit interrupt:4 class
+	mov.b	#00000011b,s0ric	;receive interrupt:3 class
+	
+
+	;+----------------------------------------------+
+	;|	uart start									|
+	;+----------------------------------------------+
+
+SerialPort_start:					;agree the uart transmit and receive data
+	bset	te_u0c1
+	bset	re_u0c1
+	
+	bset	tstart_tracr
+
+	
+;+----------------------------------------------------------------------------------------------------+	
+	;+----------------------------------------------+
+	;|	init to ram									|
+	;+----------------------------------------------+
+	
+	mov.b	#02h,carSender
+	mov.b	#28,carSender+1
+	mov.b	#03h,carSender+31
+	
+;	mov.w	#Tires_ID1,a0					;轮胎ID初始化（以后根据LCD的设置值从FLASH取值）
+;	mov.b	#060h,00[a0]
+;	mov.b	#0c2h,01[a0]
+;;	mov.b	#015h,02[a0]
+;	mov.b	#0f6h,03[a0]
+;	mov.b	#0dbh,07[a0]
+;	mov.b	#0c3h,08[a0]
+;	mov.b	#015h,09[a0]
+;	mov.b	#0f6h,10[a0]
+;	mov.b	#0c0h,14[a0]
+;	mov.b	#0bch,15[a0]
+;	mov.b	#015h,16[a0]
+;	mov.b	#0f6h,17[a0]
+;	mov.b	#080h,21[a0]
+;	mov.b	#0c3h,22[a0]
+;	mov.b	#015h,23[a0]
+;	mov.b	#0f6h,24[a0]
+;	mov.b	#70,High_t						;报警比较值初始化
+;	mov.b	#80,More_Hight_t
+;	mov.b	#20h,Low_p
+;	mov.b	#35h,High_p
+;	mov.w	#GE_RA_data,a0					;判沿初始化
+;	mov.b	#04h,GE_compare
+	
+	mov.w	#Tires_ID1,a0					;轮胎ID初始化（以后根据LCD的设置值从FLASH取值）
+	mov.b	flashadd+4,00[a0]
+	mov.b	flashadd+5,01[a0]
+	mov.b	flashadd+6,02[a0]
+	mov.b	flashadd+7,03[a0]
+	mov.b	flashadd+8,07[a0]
+	mov.b	flashadd+9,08[a0]
+	mov.b	flashadd+10,09[a0]
+	mov.b	flashadd+11,10[a0]
+	mov.b	flashadd+12,14[a0]
+	mov.b	flashadd+13,15[a0]
+	mov.b	flashadd+14,16[a0]
+	mov.b	flashadd+15,17[a0]
+	mov.b	flashadd+16,21[a0]
+	mov.b	flashadd+17,22[a0]
+	mov.b	flashadd+18,23[a0]
+	mov.b	flashadd+19,24[a0]
+
+	mov.b	flashadd+3,High_t						;报警比较值初始化
+	mov.b	flashadd+4,More_Hight_t
+	mov.b	flashadd+1,Low_p
+	mov.b	flashadd,High_p
+	
+	mov.w	#GE_RA_data,a0					;判沿初始化
+	mov.b	#04h,GE_compare
+	
+	mov.b	#02h,ENQ
+	mov.b	#01h,ENQ+1
+	mov.b	#05h,ENQ+2
+	mov.b	#06h,ENQ+3
+	mov.b	#03h,ENQ+4
+	
+	mov.b	#02h,EOT
+	mov.b	#01h,EOT+1
+	mov.b	#04h,EOT+2
+	mov.b	#05h,EOT+3
+	mov.b	#03h,EOT+4
+	
+	mov.b	#02h,ACK
+	mov.b	#01h,ACK+1
+	mov.b	#06h,ACK+2
+	mov.b	#07h,ACK+3
+	mov.b	#03h,ACK+4
+	
+	mov.b	#02h,NAK
+	mov.b	#01h,NAK+1
+	mov.b	#15h,NAK+2
+	mov.b	#16h,NAK+3
+	mov.b	#03h,NAK+4
+	
+	mov.w	#receivedata,receiveadd
+	mov.w	#receivedata,lastadd
+	add.w	#3,lastadd
+	
+	;+----------------------------------------------+
+	;|	Main start									|
+	;+----------------------------------------------+
+	fset i						;interrupt on
+;	mov.b	#00,Tires_ID1+5
+	
+Main:
+	btst	serialbusy
+	jc		setupstart
+	jsr.w	Convert_man
+	btst	Serial_update		;asdlfjasdljf
+	jc		serialstart
+	jmp		Main
+	
+serialstart:
+	jsr.w	bcc_generate
+	jsr.w	uart_PC
+	bclr	Serial_update
+;	inc.b	Tires_ID1+5
+
+	mov.b	#00h,time1
+Timefordelay:	
+	inc.b	time1
+	jsr.w	TimeDelay
+	cmp.b	#0ah,time1
+	jz		Main
+	jmp		Timefordelay
+	
+setupstart:
+	jsr.w	PC_uart_start
+	jmp		reset				;ldsjflakjdlfk
+	
+	
+	
+;	bset	tstart_tracr
+;	jmp		Main
+	
+	
+;;
+;+----------------------------------------------------------------------------------------------------+
+
+	;+----------------------------------------------+
+	;|	Calculate the ge info						|
+	;+----------------------------------------------+
+
+Convert_man:
+	btst	GE_man_update					;收GE数据有更新
+	jnc		Convert_man_end1
+;	btst	Serial_update		;asdlfjasdljf
+;	jc		Convert_man_end1
+	mov.w	#GE_RA_data,a0
+	mov.b	#00h,GE_bit_num
+	mov.w	#GE_tire_data,GE_tire_addr
+	dec.w	a0								;抵消inc.w	a0语句
+
+Convert_man0:
+	inc.w	a0
+	cmp.b	#10h,0[a0]						;拼装完成校验
+	jc		Convert_man_fin0
+	cmp.b	#06h,0[a0]
+	jc		Convert_man2
+	bnot	GE_bit
+	btst	IsLeft
+	jnc		Convert_man1
+	bnot	IsLeft
+	btst	GE_bit							;半个曼码时间沿跳变
+	push.w	a0
+	mov.w	GE_tire_addr,a0
+	rolc.b	0[a0]
+	pop.w	a0
+	inc.b	GE_bit_num
+	cmp.b	#08h,GE_bit_num					;拼装一字节地址加一
+	jnz		Convert_man0
+	mov.b	#00h,GE_bit_num
+	add.w	#01h,GE_tire_addr
+	jmp		Convert_man0
+
+Convert_man_end1:							;跳转接力
+  	jmp		Convert_man_end
+
+Convert_man1:								;当前拼装结束置标志
+	bnot	IsLeft
+	jmp		Convert_man0
+
+Convert_man2:								;一个曼码时间沿跳变
+	bnot	GE_bit
+	btst	GE_bit
+	push.w	a0
+	mov.w	GE_tire_addr,a0
+	rolc.b	0[a0]
+	pop.w	a0
+	inc.b	GE_bit_num
+	cmp.b	#08h,GE_bit_num					;拼装一字节地址加一
+	jnz		Convert_man0
+	mov.b	#00h,GE_bit_num
+	add.w	#01h,GE_tire_addr
+	jmp		Convert_man0
+
+Convert_man_fin0:							;拼装成功校验曼码
+	mov.b	#07h,GE_par_num
+	mov.w	#GE_tire_data,a0
+	mov.b	0[a0],GE_par
+	inc.w	a0
+
+Convert_man_fin1:							;生成校验位						
+	xor.b	0[a0],GE_par
+	dec.b	GE_par_num
+	inc.w	a0
+	cmp.b	#00h,GE_par_num
+	jnz		Convert_man_fin1
+
+Cpnvert_man_fin2:							;比较校验位
+	cmp.b	0[a0],GE_par
+	jnz		Convert_man_out1
+
+tireID1:									;轮胎ID1比较
+	cmp.w	GE_tire_data,Tires_ID1
+	jnz		tireID2
+	cmp.w	GE_tire_data+2,Tires_ID1+2
+	jnz		Convert_man_out1
+	jsr		Set_Alarm
+	mov.w	GE_tire_data+4,Tires_ID1+4
+	mov.b	alarm,Tires_ID1+6
+	jmp		Convert_man_out0
+
+Convert_man_out1:
+	jmp		Convert_man_out
+
+tireID2:									;轮胎ID2比较
+	cmp.w	GE_tire_data,Tires_ID2
+	jnz		tireID3
+	cmp.w	GE_tire_data+2,Tires_ID2+2
+	jnz		Convert_man_out
+	jsr		Set_Alarm
+	mov.w	GE_tire_data+4,Tires_ID2+4
+	mov.b	alarm,Tires_ID2+6
+	jmp		Convert_man_out0
+
+tireID3:									;轮胎ID3比较
+	cmp.w	GE_tire_data,Tires_ID3
+	jnz		tireID4
+	cmp.w	GE_tire_data+2,Tires_ID3+2
+	jnz		Convert_man_out
+	jsr		Set_Alarm
+	mov.w	GE_tire_data+4,Tires_ID3+4
+	mov.b	alarm,Tires_ID3+6
+	jmp		Convert_man_out0
+
+tireID4:									;轮胎ID4比较
+	cmp.w	GE_tire_data,Tires_ID4
+	jnz		Convert_man_out
+	cmp.w	GE_tire_data+2,Tires_ID4+2
+	jnz		Convert_man_out
+	jsr		Set_Alarm
+	mov.w	GE_tire_data+4,Tires_ID4+4
+	mov.b	alarm,Tires_ID4+6
+
+Convert_man_out0:							;处理完置标志
+	bset	Serial_update
+
+Convert_man_out:							;校验成功置标志
+	bclr	IsLeft
+	bclr	GE_bit
+	bclr	GE_man_update	
+	mov.w	#GE_RA_data,a0
+
+Convert_man_end:
+	rts
+	
+	;+----------------------------------------------+
+	;|	 Alarm Set									|
+	;+----------------------------------------------+
+	
+Set_Alarm:									;电压低报警
+	mov.w	#GE_tire_data,a0
+	cmp.b	#0afh,6[a0]
+	jc		Set_Alarm1
+	jmp		Set_Alarm2
+
+Set_Alarm1:
+	bset	alarm0
+
+Set_Alarm2:									;温度报警
+	sub.b	#50,5[a0]
+	jc		Set_Alarm2_1
+	neg.b	5[a0]							;处理温度为负
+	add.b	#80h,5[a0]
+	jmp		Set_Alarm4
+
+Set_Alarm2_1:
+	cmp.b	High_t,5[a0]
+	jnc		Set_Alarm4
+	cmp.b	More_Hight_t,5[a0]
+	jnc		Set_Alarm3
+	bset	alarm5
+	jmp		Set_Alarm4
+
+Set_Alarm3:
+	bset	alarm4
+
+Set_Alarm4:									;压力报警
+	mov.b	#00h,r0h
+	mov.b	4[a0],r0l
+	div.b	#72
+	movlh	r0l,4[a0]
+	mov.b	r0h,r0l
+	mov.b	#00h,r0h
+	mul.b	#10,r0l
+	div.b	#72
+	movll	r0l,4[a0]
+	add.b	#10h,4[a0]
+	cmp.b	High_p,4[a0]
+	jc		Set_Alarm5
+	cmp.b	Low_p,4[a0]
+	jnc		Set_Alarm6
+	jmp		Set_Alarm_end
+
+Set_Alarm5:
+	bset	alarm4
+	jmp		Set_Alarm_end
+
+Set_Alarm6:
+	bset	alarm3
+	
+Set_Alarm_end:
+	rts
+
+	;+----------------------------------------------+
+	;|	PC_uart										|
+	;+----------------------------------------------+
+	
+PC_uart_start:
+	push.w	a1
+	push.b	r0h
+	push.w	r2
+
+PC_uart:
+	btst	serialbusy
+	jnc		PC_uart_end1
+	btst	uart_rec
+	jnc		PC_uart
+
+answerrec:
+	bclr	uart_rec
+	btst	setupf
+	jc		savetheinfo
+	btst	eotf
+	jc		eotanswer
+	btst	errorf
+	jc		nakanswer
+	jmp		ackanswer
+
+PC_uart_end1:
+	jmp		PC_uart_end
+
+savetheinfo:
+;	mov.w	#setupinfo,a1
+;	mov.w	#receivedata,a0
+;	add.w	#2,a0
+;	mov.b	#00,r1h
+;	mov.w	#20,r3
+;	smovf.b
+	mov.w	#setupinfo,r2
+	mov.w	#receivedata,a1
+	add.w	#2,a1
+	mov.b	#20,r0h
+	jsr.w	transsetup
+ackanswer:	
+	mov.b	#05h,sendnum
+	mov.w	#ACK,sendadd
+	jmp		sendanswer
+	
+nakanswer:
+	mov.b	#05h,sendnum
+	mov.w	#NAK,sendadd
+
+sendanswer:
+	jsr.w	uart_transmit
+	jsr.w	Receivedata_Clear
+	jmp		PC_uart
+	
+eotanswer:
+	bclr	eotf
+	bclr	serialbusy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	mov.b	setupinfo+1,r1l						;低压报警值计算
+	and.b	#07h,r1l
+	mul.b	#05h,r1l
+	mov.b	#00h,r1h
+	mov.b	#00h,r0l
+	mov.b	setupinfo,r0h
+	mov.b	r1l,Temp_a
+	mov.b	setupinfo,r1l
+
+Pre_Calculate:
+	dsbb.w	r1,r0
+	sub.b	#01h,Temp_a
+	cmp.b	#00h,Temp_a
+	jnz		Pre_Calculate
+	mov.b	r0h,Low_p
+	mov.b	setupinfo+1,r1l						;高压报警值计算
+	rorc.b	r1l
+	rorc.b	r1l
+	rorc.b	r1l
+	rorc.b	r1l
+	and.b	#07h,r1l
+	mul.b	#05h,r1l
+	mov.b	#00h,r1h
+	mov.b	#00h,r0l
+	mov.b	setupinfo,r0h
+	mov.b	r1l,Temp_a
+	mov.b	setupinfo,r1l
+
+Pre_Calculate1:
+	dadd.w	r1,r0
+	sub.b	#01h,Temp_a
+	cmp.b	#00h,Temp_a
+	jnz		Pre_Calculate1	
+	mov.b	r0h,High_p
+	mov.b	High_p,setupinfo
+	mov.b	Low_p,setupinfo+1
+;	mov.w	setupinfo+2,High_t
+;	mov.w	setupinfo+04,Tires_ID1
+;	mov.w	setupinfo+06,Tires_ID1+2
+;	mov.w	setupinfo+08,Tires_ID2
+;	mov.w	setupinfo+10,Tires_ID2+2
+;	mov.w	setupinfo+12,Tires_ID3
+;	mov.w	setupinfo+14,Tires_ID3+2
+;	mov.w	setupinfo+16,Tires_ID4
+;	mov.w	setupinfo+18,Tires_ID4+2
+	jsr		Flash_Write				;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	bset	flashDataOK
+	jmp		PC_uart
+	
+PC_uart_end:
+	pop.w	r2
+	pop.b	r0h
+	pop.w	a1
+rts
+
+	;+----------------------------------------------+
+	;|	transmit setup to ram						|
+	;|	input:a1,r0h,r3								|
+	;+----------------------------------------------+
+
+transsetup:
+	mov.b	0[a1],tempdata
+	mov.w	a1,r3
+	mov.w	r2,a1
+	mov.b	tempdata,0[a1]
+	inc.w	a1
+	mov.w	a1,r2
+	mov.w	r3,a1
+	inc.w	a1
+	dec.b	r0h
+	jz		transsetup_end
+	jmp		transsetup
+transsetup_end:
+	rts
+	
+	;+----------------------------------------------+
+	;|	uart transmit to pc							|
+	;|	input:no									|
+	;+----------------------------------------------+
+	
+uart_PC:
+	btst	serialbusy
+	jc		isenq1
+	
+	cmp.b	#00h,model
+	jz		enqsend
+	cmp.b	#01h,model
+	jz		datasend
+	cmp.b	#02h,model
+	jz		eotsend
+	
+enqsend:
+	mov.b	#05h,sendnum
+	mov.w	#ENQ,sendadd
+	jmp		send
+datasend:
+	mov.b	#32,sendnum
+	mov.w	#carSender,sendadd
+	jmp		send
+eotsend:
+	mov.b	#05,sendnum
+	mov.w	#EOT,sendadd
+	jmp		send
+
+send:
+	jsr.w	uart_transmit
+	inc.b	transnum
+	cmp.b	#02h,model
+	jz		clear_flag
+	
+	mov.b	#00h,time1
+send01:
+	btst	uart_rec
+	jc		answerdistomcu
+	inc.b	time1
+	jsr.w	TimeDelay
+
+	cmp.b	#05h,time1
+	jz		clear_flag
+	;cmp.b	#0ffh,r0l
+	;jz		send
+	jmp		send01
+		
+answerdistomcu:
+	btst	ackf
+	jc		isack1
+	btst	enqf
+	jc		isenq1
+	jmp		isnak1
+
+isenq1:
+	mov.b	#00h,model
+	bset	serialbusy
+	jmp		send_end
+isack1:
+	bclr	uart_rec
+	bclr	ackf
+	jsr.w	Receivedata_Clear
+	inc.b	model
+	jmp		uart_PC
+isnak1:
+	bclr	uart_rec
+	mov.b	#00h,flag3
+	jsr.w	Receivedata_Clear
+	jmp		clear_flag
+	
+clear_flag:
+	mov.b	#00h,model
+	;mov.b	#00h,flag3
+	mov.b	#00h,flag2
+	bclr	Serial_update
+
+send_end:
+	rts
+	
+	;+----------------------------------------------+
+	;|	delay				|
+	;|						|
+	;+----------------------------------------------+
+	
+TimeDelay:
+	mov.w	#05fffh,r3
+TimeDelay2:
+	adjnz.w	#-1,r3,TimeDelay2
+rts
+	
+	;+----------------------------------------------+
+	;|	bcc check									|
+	;|	input:receivedata,bccnum					|
+	;+----------------------------------------------+
+
+bcc_check:
+	push.w	a1
+	mov.b	#00h,bcc
+	mov.w	#receivedata,a1
+	mov.b	receivedata+1,bccnum
+	inc.b	bccnum
+bcc_add:
+	inc.w	a1
+	add.b	0[a1],bcc
+	dec.b	bccnum
+	jz		bcc_check01
+	jmp		bcc_add
+bcc_check01:
+	cmp.b	bcc,1[a1]
+	jz		setflag
+	bclr	bccright
+	jmp		bcc_end
+setflag:
+	bset	bccright
+bcc_end:
+	mov.b	#00h,bccnum
+	mov.b	#00h,bcc
+	pop.w	a1
+	rts
+	
+	;+----------------------------------------------+
+	;|	bcc generate								|
+	;|	input:receivedata,bccnum					|
+	;+----------------------------------------------+
+bcc_generate:
+	push.w	a1
+	mov.b	#00h,bcc
+	mov.w	#carSender,a1
+	mov.b	carSender+1,bccnum
+	inc.b	bccnum
+bcc_generate01:
+	inc.w	a1
+	add.b	0[a1],bcc
+	dec.b	bccnum
+	jz		bcc_generate02
+	jmp		bcc_generate01
+bcc_generate02:
+	mov.b	bcc,1[a1]
+	pop.w	a1
+	rts
+
+	;+----------------------------------------------+
+	;|	Flash_Write									|
+	;|												|
+	;+----------------------------------------------+
+Flash_Write:
+	fclr	i
+	mov.b	#01h,fmr0
+	mov.b	#03h,fmr0
+	mov.b	#80h,fmr1
+	mov.b	#82h,fmr1
+	mov.b	#20h,flashblock_a
+	mov.b	#0D0h,flashblock_a
+	jmp		Erase_A
+
+Flash_Write2:
+	jmp		Flash_Write
+
+Erase_A:
+	btst	fmr00
+	jnc		Erase_A
+	btst	fmr07
+	jc		Flash_Write
+	mov.b	#40h,flashadd
+	mov.b	setupinfo,flashadd
+	mov.b	#40h,flashadd+1
+	mov.b	setupinfo+1,flashadd+1
+	mov.b	#40h,flashadd+2
+	mov.b	setupinfo+2,flashadd+2
+	mov.b	#40h,flashadd+3
+	mov.b	setupinfo+3,flashadd+3
+	mov.b	#40h,flashadd+4
+	mov.b	setupinfo+4,flashadd+4
+	mov.b	#40h,flashadd+5
+	mov.b	setupinfo+5,flashadd+5
+	mov.b	#40h,flashadd+6
+	mov.b	setupinfo+6,flashadd+6
+	mov.b	#40h,flashadd+7
+	mov.b	setupinfo+7,flashadd+7
+	mov.b	#40h,flashadd+8
+	mov.b	setupinfo+8,flashadd+8
+	mov.b	#40h,flashadd+9
+	mov.b	setupinfo+9,flashadd+9
+	mov.b	#40h,flashadd+10
+	mov.b	setupinfo+10,flashadd+10
+	mov.b	#40h,flashadd+11
+	mov.b	setupinfo+11,flashadd+11
+	mov.b	#40h,flashadd+12
+	mov.b	setupinfo+12,flashadd+12
+	mov.b	#40h,flashadd+13
+	mov.b	setupinfo+13,flashadd+13
+	mov.b	#40h,flashadd+14
+	mov.b	setupinfo+14,flashadd+14
+	mov.b	#40h,flashadd+15
+	mov.b	setupinfo+15,flashadd+15
+	mov.b	#40h,flashadd+16
+	mov.b	setupinfo+16,flashadd+16
+	mov.b	#40h,flashadd+17
+	mov.b	setupinfo+17,flashadd+17
+	mov.b	#40h,flashadd+18
+	mov.b	setupinfo+18,flashadd+18
+	mov.b	#40h,flashadd+19
+	mov.b	setupinfo+19,flashadd+19
+	jmp		Write_Over
+
+Flash_Write1:
+	jmp		Flash_Write2
+
+Write_Over:
+	btst	fmr00
+	jnc		Write_Over
+	btst	fmr06
+	jc		Flash_Write1
+	bclr	fmr01
+	fset	i
+	rts
+
+	;+----------------------------------------------+
+	;|	Clear Ram									|
+	;+----------------------------------------------+
+	
+Receivedata_Clear:						;clear ram info
+	push.w	a1
+	push.w	r0
+	push.w	r3
+	mov.w	#0,r0						;set r0 0
+	mov.w	#30,R3						;set the lenght of ram to r3
+	mov.w	#receivedata,a1				;set ram start adress to a1
+	sstr.b
+	pop.w	r3
+	pop.w	r0
+	pop.w	a1
+	rts
+	
+
+	;+----------------------------------------------+
+	;|	uart transmit								|
+	;|	input:a0									|
+	;+----------------------------------------------+
+
+uart_transmit:
+	push.w	a1
+	mov.w	sendadd,a1
+wait_empty:
+	btst	ti_u0c1
+	jnc	 	wait_empty
+	mov.b 	0[a1],u0tb
+	inc.w	a1
+	dec.b	sendnum
+	mov.w	a1,sendadd
+	pop.w	a1
+	rts
+	
+	;+----------------------------------------------+
+	;|	Timer RA start								|
+	;+----------------------------------------------+
+
+TRA_start:
+	bset	tstart_tracr
+	rts
+	
+	;+----------------------------------------------+
+	;|	Timer RA over								|
+	;+----------------------------------------------+
+
+TRA_over:
+	bclr	tstart_tracr
+	rts
+	
+
+
+;+----------------------------------------------------------------------------------------------------+
+
+
+notuse:
+	reit
+
+	;+----------------------------------------------+
+	;|	uart interrupt transmit						|
+	;+----------------------------------------------+
+	
+uart_interrupt_transmit:
+	push.w	a1
+	mov.w	sendadd,a1
+	cmp.b	#00h,sendnum
+	jz		tra_end
+	mov.b 	0[a1],u0tb
+	inc.w	a1
+	dec.b	sendnum
+tra_end:
+	mov.w	a1,sendadd
+	pop.w	a1
+	reit
+	
+	;+----------------------------------------------+
+	;|	uart interrupt receive						|
+	;+----------------------------------------------+
+	
+uart_interrupt_receive:
+	push.w	a1
+	mov.w	receiveadd,a1
+	mov.w	u0rb,0[a1]
+	inc.b	receiveadd
+	mov.w	lastadd,a1
+	add.b	receivedata+1,a1
+	cmp.b	#03h,0[a1]
+	jz		initadd
+	jmp		uart_interrupt_receive_end
+	
+initadd:
+	mov.b	#00h,0[a1]
+	mov.b	#00h,flag3
+	bclr	uart_rec
+	jsr.w	bcc_check
+	btst	bccright
+	jc		bccpass
+	bset	errorf
+	jmp		receive_over
+	
+bccpass:
+	bclr	bccright
+	cmp.b	#01h,receivedata+1
+	jz		answerdis
+	bset	setupf
+	jmp		receive_over
+	
+answerdis:
+	cmp.b	#05,receivedata+2
+	jz		isenq
+	cmp.b	#06,receivedata+2
+	jz		isack
+	cmp.b	#15h,receivedata+2
+	jz		isnak
+	bset	eotf
+	jmp		receive_over
+	
+isenq:
+	bset	enqf
+	bclr	tstart_tracr
+	bset	serialbusy
+	jmp		receive_over
+isack:
+	bset	ackf
+	jmp		receive_over
+isnak:
+	bset	nakf
+	jmp		receive_over
+	
+	bset	errorf
+receive_over:
+	bset	uart_rec
+	mov.w	#receivedata,receiveadd
+uart_interrupt_receive_end:
+	pop.w	a1
+	reit
+	
+	
+	;+----------------------------------------------+
+	;|	RA Timer Interupt							|
+	;+----------------------------------------------+
+	
+RA_receive:
+	;push.w	a0
+	;mov.w	r2,a0
+	btst	serialbusy
+	jc		RA_receive_end1
+	btst	GE_man_update					;入口条件判断(上次更新已处理)
+	jc		RA_receive_end1
+	btst	p1_2							;存储沿变化
+	rolc.b	GE_change
+	and.b	#07h,GE_change
+	inc.b	RA_count
+	cmp.b	GE_compare,GE_change			;判断沿变化	
+	jnz		RA_receive_end1
+	not.b	GE_compare						;沿变化比较值翻转
+	and.b	#07h,GE_compare
+	mov.b	RA_count,temp					;存RA_count
+	mov.b	#00h,RA_count
+	btst	leadcode0						;引导码收0跳转
+	jc		RA_lead0
+	btst	cardata							;收GE数据跳转
+	jc		RA_receivecar
+	cmp.b	#03h,temp						;引导码收1
+	jnc		RA_clear
+	cmp.b	#06h,temp
+	jc		RA_clear
+	inc.b	GE_lead_num
+	cmp.b	#40,GE_lead_num
+	jnz		RA_receive_end
+	bset	leadcode0
+	jmp		RA_receive_end
+
+RA_receive_end1:							;跳转接力
+	jmp		RA_receive_end
+
+RA_lead0:									;引导码收0
+	cmp.b	#03h,temp
+	jnc		RA_clear
+	cmp.b	#0bh,temp
+	jc		RA_clear
+	cmp.b	#06h,temp
+	jz		RA_clear
+	cmp.b	#07h,temp
+	jnc		RA_receive_end
+	bset	cardata							;收到0置标志
+	bclr	leadcode0
+	jmp		RA_receive_end
+
+RA_receivecar:								;收GE数据
+	mov.b	temp,0[a0]
+	inc.w	a0
+	cmp.b	#10h,temp
+	jnc		RA_receive_end
+	bset	GE_man_update					;全收完置标志
+	jmp		RA_clear
+
+RA_clear:									;退出或结束清标志
+	bclr	cardata
+	bclr	leadcode0
+	mov.b	#00h,GE_lead_num
+	;mov.b	#04h,GE_compare					;该句导致GE数据无法收完	
+	mov.b	#00h,GE_change
+
+RA_receive_end:
+	;mov.w	a0,r2
+	;pop.w	a0
+	reit
+
+
+;+----------------------------------------------------------------------------------------------------+	
+
+;==================================================
+;可变中断向量表
+;==================================================
+						.section vi,romdata
+						.org var_vector
+		.lword notuse 				;vector 00 (brk指令)
+		.lword notuse 				;vector 01 (保留)
+		.lword notuse				;vector 02 (保留)
+		.lword notuse				;vector 03 (保留)
+		.lword notuse				;vector 04 (保留)
+		.lword notuse				;vector 05 (保留)
+		.lword notuse				;vector 06 (保留)
+		.lword notuse				;vector 07 (定时器rc)
+		.lword notuse				;vector 08 (保留)
+		.lword notuse				;vector 09 (保留)
+		.lword notuse				;vector 10 (定时器re)
+		.lword notuse				;vector 11 (保留)
+		.lword notuse				;vector 12 (保留)
+		.lword notuse				;vector 13 (键输入)
+		.lword notuse				;vector 14 (a/d转换)
+		.lword notuse				;vector 15 (同步串行)
+		.lword notuse				;vector 16 (保留)
+		.lword uart_interrupt_transmit				;vector 17 (uart0发送)
+		.lword uart_interrupt_receive				;vector 18 (uart0接收)
+		.lword notuse				;vector 19 (uart1发送)
+		.lword notuse				;vector 20 (uart1接收)
+		.lword notuse				;vector 21 (保留)
+		.lword RA_receive			;vector 22 (定时器ra)
+		.lword notuse				;vector 23 (保留)
+		.lword notuse				;vector 24 (定时器rb)
+		.lword notuse				;vector 25 (int1)
+		.lword notuse				;vector 26 (int3)
+		.lword notuse				;vector 27 (保留)
+		.lword notuse				;vector 28 (保留)
+		.lword notuse				;vector 29 (int0)
+		.lword notuse				;vector 30 (保留)
+		.lword notuse				;vector 31 (保留)
+		.lword notuse				;vector 32 (保留)
+		.lword notuse				;vector 33 (保留)
+		.lword notuse				;vector 34 (保留)
+		.lword notuse				;vector 35 (保留)
+		.lword notuse				;vector 36 (保留)
+		.lword notuse				;vector 37 (保留)
+		.lword notuse				;vector 38 (保留)
+		.lword notuse				;vector 39 (保留)
+		.lword notuse				;vector 40 (保留)
+		.lword notuse				;vector 41 (保留)
+		.lword notuse				;vector 42 (保留)
+		.lword notuse				;vector 43 (保留)
+		.lword notuse				;vector 44 (保留)
+		.lword notuse				;vector 45 (保留)
+		.lword notuse				;vector 46 (保留)
+		.lword notuse				;vector 47 (保留)
+		.lword notuse				;vector 48 (保留)
+		.lword notuse				;vector 49 (保留)
+		.lword notuse				;vector 50 (保留)
+		.lword notuse				;vector 51 (保留)
+		.lword notuse				;vector 52 (保留)
+		.lword notuse				;vector 53 (保留)
+		.lword notuse				;vector 54 (保留)
+		.lword notuse				;vector 55 (保留)
+		.lword notuse				;vector 56 (保留)
+		.lword notuse				;vector 57 (保留)
+		.lword notuse				;vector 58 (保留)
+		.lword notuse				;vector 59 (保留)
+		.lword notuse				;vector 60 (保留)
+		.lword notuse				;vector 61 (保留)
+		.lword notuse				;vector 62 (保留)
+		.lword notuse				;vector 63 (保留)
+		;==================================================
+		;固定中断向量表
+		;==================================================
+						.section fi,romdata
+						.org fix_vector
+		.lword notuse 				;0ffdch-0ffdfh(未定义)
+		.lword notuse				;0ffe0h-0ffe3h(上溢)
+		.lword notuse 				;0ffe4h-0ffe7h(BRK指令)
+		.lword notuse				;0ffe8h-0ffebh(地址匹配)
+		.lword notuse 				;0ffech-0ffefh(单步)
+		.lword reset  				;0fff0h-0fff3h(看门狗)
+		.lword notuse 				;0fff4h-0fff7h(地址断开)
+		.lword notuse 				;0fff8h-0fffbh(保留)
+		.lword reset  				;0fffch-0ffffh(复位)
+		.end	
+	

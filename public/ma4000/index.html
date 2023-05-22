@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MA4000 - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="MA4000 Reference: https://www.nec-enterprise.com/products/MA4000-System-Management-98 MA4000 is to create bussiness model of PBX data to replace the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/ma4000">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">MA4000</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-17T17:21:00+01:00" pubdate data-updated="true"></time></p>
+  </header>
+  
+  <p>Reference: <a href="https://www.nec-enterprise.com/products/MA4000-System-Management-98">https://www.nec-enterprise.com/products/MA4000-System-Management-98</a></p>
+
+<p>MA4000 is to create bussiness model of PBX data to replace the PBX command system. The old command system is too complicate to learn and operate. E.g. when someone want to register a specific kind of phone in the PBX, he should input 5 or more commands to the pbx system with lots of parameters following the manual book(1000 pages). This group of commands are nothing related to the real meanings of the phone. Command is close to a bash style. MA4000 system create the real bussiness type and understandable UI of the phone to let user easliy to manage the data of PBX which hides the real data and commands. E.g. instead of a group of hardcore commands, the system could visualize and operate a real phone model with its parameters from the user interaction.</p>
+
+<p><img src="/images/ma4000.png"></p>
+
+<p>Shown as figure, the system is designed as a traditional 3 layers sturctures. View layer includes UI based on ASP.net which visualize the data and user interation of functions. And the funcion workflow and bussiness defination is implemented in business layer. The final data layer mainly focus on DB operation and PBX command message communication with PBXEngineSDK which is developed as another project.</p>
+
+<p>The source code is about 50 mb large under zip compress, more than 100 mouldes defined, and includes a large database with 5 mb size package of sql files. The duration of the project development is longer than 10 years until now.</p>
+
+<p>I thought it is an old design and becomes complicated when it turns large without flexibility as modern framework design. But it includes everything about business system development on .Net framework on Windows server. The chanllege work of the project is how to design the business object to the PBX data, and design the user interaction of the features.</p>
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-17T17:21:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

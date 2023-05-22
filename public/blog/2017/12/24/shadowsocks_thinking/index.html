@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>从开源项目Shadowsocks感慨 - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="最近国内的vpn监管变得更加严格了，用了很久的vpncup也挂掉了，相关服务商基本都进去喝茶了。不得不开始研究一下自建方案，无意间发现了shadowsocks这个开源项目,并看到了国内码农们与gfw抗争的一段心酸的历史。 根据文章https://chinadigitaltimes.net/ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/blog/2017/12/24/shadowsocks_thinking">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">从开源项目Shadowsocks感慨</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-12-24T00:04:30+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近国内的vpn监管变得更加严格了，用了很久的vpncup也挂掉了，相关服务商基本都进去喝茶了。不得不开始研究一下自建方案，无意间发现了shadowsocks这个开源项目,并看到了国内码农们与gfw抗争的一段心酸的历史。</p>
+
+<!-- more -->
+
+
+<p>根据文章<a href="https://chinadigitaltimes.net/chinese/2016/08/gfw-blog%EF%BD%9Cshadowsocks-%E7%9A%84%E5%89%8D%E4%B8%96%E5%90%8E%E7%94%9F/">https://chinadigitaltimes.net/chinese/2016/08/gfw-blog%EF%BD%9Cshadowsocks-%E7%9A%84%E5%89%8D%E4%B8%96%E5%90%8E%E7%94%9F/</a></p>
+
+<p>shadowsocks一开始是由@Clowwindy所写的一个带加密的sock5代理，加密算法是直接调用了openssl的实现，算是一个比较简易的代理服务，由于中间通过了openssl的加密，提高了gfw识别以及屏蔽的难度。比较一般的网络代理更加安全稳定，同时相比vpn来说又提高了部署的便捷性，所以一时间成为了翻墙的利器，同时也被大量的网络投机服务商拿来赚取暴利,导致很快被政府盯上，传出作者被叫去喝茶，并且连夜删除了在github上的所有代码，并在社区销声匿迹，真是佩服天朝的手腕。</p>
+
+<p>不过网络就是这样，既然已经传开了，再要制止住已经是一件不可能的事了，尤其是码农这个群体，本质上所有码农都有一颗黑客的心。政府的强势干预造成了更加强烈的反弹，开源社区自行维护的shadowsocks各种版本不计其数，周边的衍生辅助工具也层出不穷。</p>
+
+<p>在vps上顺利的部署好代理服务后，正好打算利用最近空闲的时间学习一下shadowsocks整个产品链代码，其中包括原始的python版本，go版本，看看能不能移植到一些国外便宜的云服务上，例如Heroku，google，amazon之类的，也为光荣的翻墙事业尽点力。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-12-24T00:04:30+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/01/08/macos-env/" title="Next Post: Introduction of development tools of MacOS">Introduction of development tools of MacOS &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

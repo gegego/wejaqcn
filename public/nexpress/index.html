@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NexPress - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="NexPress Reference:https://www.kodak.com/us/en/print/Products/Printers_Presses/Nexpress_Platform/default.htm This project is a management system to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/nexpress">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">NexPress</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-18T16:50:00+01:00" pubdate data-updated="true"></time></p>
+  </header>
+  
+  <p>Reference:<a href="https://www.kodak.com/us/en/print/Products/Printers_Presses/Nexpress_Platform/default.htm">https://www.kodak.com/us/en/print/Products/Printers_Presses/Nexpress_Platform/default.htm</a></p>
+
+<p>This project is a management system to the nexpress device. The motivation of this project is that the orignal mangement system is old(about used from 2003) which is develped based on java applet gui and c++ device sdk. There are issues when java update every time and it also couldn&rsquo;t meet the new requirements for the mobile devices.</p>
+
+<p>So we start to design and develop new system with latest B/S framework. The frontend is developped on AngularJS and Bootstrap UI. And backend system create a <a href="https://bottlepy.org/docs/dev/">bottle</a> web server and a websocket server (<a href="http://www.gevent.org/">gevent</a>). Bottle server is router from url to html page and web socket creation. The web socket server waiting the message content from frontend, call the engine service and return the feedback. And json used as the data type of web socket connection.</p>
+
+<p><img src="/images/nexpress.png"></p>
+
+<p>Shown as the figure, the frontend create a websocket connection when openning. And in funtion page, sending message with parameters like &ldquo;evt=method&rdquo; to server, the server calls the related engine method and get json feedback. <a href="https://github.com/gegego/WorkConnect">Here</a> is source code of a prototype webapp example of similar framework design.</p>
+
+<p>Firstly the project is just for prototyping to the customers of nexpress. However some customers likes the user interaction of monitoring of job status and sending jobs with mobile device like IPAD or moblie phone. So we can contiue to doing the work of more functions.</p>
+
+<p>The chanllege of the project is the user interaction of web is toally different with old java desktop app, we need to design the new UI to satisfy the requirments. And it is the first big business modern web system project for me. And I am very glad to learn the new things like angularjs and python.</p>
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-18T16:50:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

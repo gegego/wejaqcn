@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Introduction of development tools of MacOS - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="Until now I have used the mac os for 3 years, but I never learn about the relative development things of Mac os. In this articles, I will take &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/blog/2018/01/08/macos-env">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Introduction of Development Tools of MacOS</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-08T15:49:04+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Until now I have used the mac os for 3 years, but I never learn about the relative development things of Mac os. In this articles, I will take introduction about some tools for the developer on Mac. The main contents are from the<a href="http://sourabhbajaj.com/mac-setup/"> macOS setup Guide</a> from <a href="http://sourabhbajaj.com/">Sourabh</a>. It is very suitable for the rookie like me.</p>
+
+<!-- more -->
+
+
+<h2>Table of Contents</h2>
+
+<ol>
+<li><a href="#xcode">XCode</a></li>
+<li><a href="#homebrew">Homebrew</a></li>
+<li><a href="#iterm">iTerm2</a></li>
+<li><a href="#zsh">Zsh</a></li>
+<li><a href="#git">Git</a></li>
+<li><a href="#atom">Atom</a></li>
+<li><a href="#python">Python</a></li>
+<li><a href="#cpp">CPlusPlus</a></li>
+<li><a href="#java">Java</a></li>
+<li><a href="#scala">Scala</a></li>
+<li><a href="#ruby">Ruby</a></li>
+<li><a href="#node">Node.js</a></li>
+<li><a href="#go">Go</a></li>
+<li><a href="#latex">Latex</a></li>
+<li><a href="#other">Others</a></li>
+</ol>
+
+
+<hr />
+
+<p><a name="xcode"></a></p>
+
+<h3><strong>XCode</strong></h3>
+
+<p>Xcode is an development environment of Apple os system, like Visual Stdio of Microsoft. The whole thing could be downloaded and installed from App Store or offical site of Apple. And Xcode command line tools could be installed by command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcode-select --install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is a package of shell command tools for Mac OS development, many things is dependent on it.</p>
+
+<hr />
+
+<p><a name="homebrew"></a></p>
+
+<h3><strong>Homebrew</strong></h3>
+
+<p>Homebrew is a package manager for macOS which help developer install and uninstall many important development tools.</p>
+
+<p>To install Homebrew by running command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Usage</strong></h4>
+
+<p>To install a package:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install &lt;formula&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To update packages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To see the package list need to be updated</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew outdated</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To update a package:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew upgrade &lt;formular&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To remove packages of old version:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew cleanup</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To see the installed package list with version number:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew list --versions
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="iterm"></a></p>
+
+<h3><strong>ITerm2</strong></h3>
+
+<p>iTerm2 is a great replacement for Apple&rsquo;s Terminal. It is highly customizable and includes many useful features.</p>
+
+<p>There are 2 ways to Install iTerm2. First, The <a href="http://www.iterm2.com/">official website</a> offer the installer. And we also could install it by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew cask install iterm2</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Customization</strong></h4>
+
+<p>We can define color, font, size, hotkeys for the iTerm2, and also there are many 3rd party resources from internet.</p>
+
+<ul>
+<li><a href="https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/schemes">Color schemes</a></li>
+<li><a href="https://github.com/adobe-fonts">Fonts</a></li>
+</ul>
+
+
+<hr />
+
+<p><a name="zsh"></a></p>
+
+<h3><strong>Zsh</strong></h3>
+
+<p>The Z shell (Zsh) is a Unix shell that can be used as an interactive login shell and as a powerful command interpreter for shell scripting(<a href="https://en.wikipedia.org/wiki/Z_shell">Wiki</a>). There are a lot of articles to compare Zsh with Bash (Apple&rsquo;s original shell). e.g. <a href="https://sunlightmedia.org/bash-vs-zsh/">Bash vs Zsh: A comparison of two command line shells</a> by Nicholas Morera.</p>
+
+<p>To install Zsh and <a href="https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org">zsh-completions</a> by Homebrew:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install zsh zsh-completions</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, we can customize the zsh by the framework <a href="https://github.com/robbyrussell/oh-my-zsh"><em>Oh My Zsh</em></a>, to install it by curl command.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re still in the default shell, change default shell to zsh manually:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ chsh -s /usr/local/bin/zsh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Configure <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-plugins">plugins</a> and <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes">theme</a> of zsh by editing ~/.zshrc file. (refer the <a href="https://github.com/robbyrussell/oh-my-zsh/wiki">wiki</a>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ZSH_THEME="robbyrussell"
+</span><span class='line'>plugins=(
+</span><span class='line'>  git
+</span><span class='line'>  bundler
+</span><span class='line'>  dotenv
+</span><span class='line'>  osx
+</span><span class='line'>  rake
+</span><span class='line'>  rbenv
+</span><span class='line'>  ruby
+</span><span class='line'>)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we can create a setting file such as <code>env.sh</code> to make some pre-defined settings, And add it to <code>.zshrc</code> with <code>source &lt;envpath&gt;/env.sh</code>. One config template (<a href="http://sourabhbajaj.com/mac-setup/iTerm/zsh.html">Ref</a>) is like:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/zsh</span>
+
+<span class="c"># PATH</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&quot;</span>
+<span class="nb">export </span><span class="nv">EDITOR</span><span class="o">=</span><span class="s1">&#39;subl -w&#39;</span>
+<span class="c"># export PYTHONPATH=$PYTHONPATH</span>
+<span class="c"># export MANPATH=&quot;/usr/local/man:$MANPATH&quot;</span>
+
+<span class="c"># Virtual Environment</span>
+<span class="nb">export </span><span class="nv">WORKON_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/.virtualenvs
+<span class="nb">export </span><span class="nv">PROJECT_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/projects
+<span class="nb">source</span> /usr/local/bin/virtualenvwrapper.sh
+
+<span class="c"># Owner</span>
+<span class="nb">export </span><span class="nv">USER_NAME</span><span class="o">=</span><span class="s2">&quot;YOUR NAME&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(rbenv init -)&quot;</span>
+
+<span class="c"># FileSearch</span>
+<span class="k">function</span> f<span class="o">()</span> <span class="o">{</span> find . -iname <span class="s2">&quot;*$1*&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">2</span><span class="k">}</span> <span class="o">}</span>
+<span class="k">function</span> r<span class="o">()</span> <span class="o">{</span> grep <span class="s2">&quot;$1&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">2</span><span class="k">}</span> -R . <span class="o">}</span>
+
+<span class="c">#mkdir and cd</span>
+<span class="k">function</span> mkcd<span class="o">()</span> <span class="o">{</span> mkdir -p <span class="s2">&quot;$@&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="s2">&quot;$_&quot;</span><span class="p">;</span> <span class="o">}</span>
+
+<span class="c">#Aliases</span>
+<span class="nb">alias </span><span class="nv">cppcompile</span><span class="o">=</span><span class="s1">&#39;c++ -std=c++11 -stdlib=libc++&#39;</span>
+
+<span class="c"># Use sublimetext for editing config files</span>
+<span class="nb">alias </span><span class="nv">zshconfig</span><span class="o">=</span><span class="s2">&quot;subl ~/.zshrc&quot;</span>
+<span class="nb">alias </span><span class="nv">envconfig</span><span class="o">=</span><span class="s2">&quot;subl ~/projects/config/env.sh&quot;</span></code></pre></div>
+
+
+<hr />
+
+<p><a name="git"></a></p>
+
+<h3><strong>Git</strong></h3>
+
+<p>Git is most important version management tools for any developer. It is hard to image anyone do works without it.</p>
+
+<p>To install it by Homebrew:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then define the user of Github:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config --global user.name "Your Name Here"
+</span><span class='line'>$ git config --global user.email "your_email@youremail.com"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And config the SSH connection is nessceary for us, following the steps from <a href="https://help.github.com/articles/connecting-to-github-with-ssh/">here</a> to generate the ssh key and upload it to Github.</p>
+
+<p>For the ignore some file out of mangement by git, we shall create the file <code>~/.gitignore</code> to setting the files (e.g. <code>.DS_Store</code>) not be tracked. One template could be found <a href="https://github.com/github/gitignore/blob/master/Global/macOS.gitignore">here</a>.</p>
+
+<p>For configring the diff and merge tool (e.g. <a href="https://www.scootersoftware.com/index.php">Beyond Compare</a>) by commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global diff.tool bc3
+</span><span class='line'>git config --global difftool.bc3.trustExitCode true
+</span><span class='line'>
+</span><span class='line'>git config --global merge.tool bc3
+</span><span class='line'>git config --global mergetool.bc3.trustExitCode true</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="atom"></a></p>
+
+<h3><strong>ATOM</strong></h3>
+
+<p>There are huge amounts of editors or IDE in MACOS, e.g. VIM, Sublime, JetBrains and so on. In this article, I will introduction <a href="https://atom.io/">ATOM Editor</a>. We can download the install fom macOS, linux and windows from its official site.</p>
+
+<p>It is a highly customizable editor based on Electron, a framework that enables cross-platform desktop applications using Chromium and Node.js(<a href="https://en.wikipedia.org/wiki/Atom_(text_editor">ref</a>)). A lot of resources about themes and plugings could be used to support what language you develop.</p>
+
+<p>And we can create a symlink of atom if it exists for using it from command line directly. Then we can use <code>atom file</code> and <code>atom folder</code> to open relatived file and folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="python"></a></p>
+
+<h3><strong>Python</strong></h3>
+
+<p>From this part, we will introduce some program languages setting-up on MacOS including <em>python, c++, Java, Scala, Ruby, Nodejs, Go</em> and <em>Latex</em>.</p>
+
+<p>macOS already includes python, but we do not mess with the system Python, so we need install our own versions. The first way is that you can install Python by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install python</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another way is to use pyenv which could help you to manage multiple versions of Python (e.g. 2.x and 3.x). It works like rbenv for Ruby. First, we must install pyenv by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install pyenv</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After installing, we should add &lsquo;pyenv init&rsquo; to the shell to enable shims and autocompletion.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ echo 'eval "$(pyenv init -)"' &gt;&gt; &lt;env folder&gt;/env.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart shell to reload the settings, then we can start to use pyenv.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ exec $SHELL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important commands are listed following with comments:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pyenv install --list      ##list all avaliable versions of Python
+</span><span class='line'>
+</span><span class='line'>$ pyenv install 2.7.12      ##install version 2.7.12
+</span><span class='line'>$ pyenv install 3.5.2       ##install version 3.5.2
+</span><span class='line'>$ pyenv rehash              ##Rehash pyenv shims (after install)
+</span><span class='line'>
+</span><span class='line'>$ pyenv global 2.7.12 3.5.2 ##set version oder, 2.7.12 before 3.5.2
+</span><span class='line'>
+</span><span class='line'>$ pyenv versions            ##see the versions of python installed
+</span><span class='line'>  system (set by /Users/your_account/.pyenv/version)
+</span><span class='line'>* 2.7.12
+</span><span class='line'>* 3.5.2
+</span><span class='line'>
+</span><span class='line'>$ cd path/to/directory
+</span><span class='line'>$ pyenv local 3.5.2       #set the python version to specific folder</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Tools</strong></h4>
+
+<p><strong><em>pip</em></strong> is important for developer to install and manage python packages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install &lt;package&gt;   #install package
+</span><span class='line'>$ pip install --upgrade &lt;package&gt;   #update package
+</span><span class='line'>$ pip freeze    #list installed packages
+</span><span class='line'>$ pip uninstall &lt;package&gt;   #uninstall package</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em><strong>Virtualenv</strong></em> is a tool which create an isolated Python enviroment for each of your projects.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv  #install
+</span><span class='line'>
+</span><span class='line'>#step 1: setup virtualenv to the project
+</span><span class='line'>$ cd myproject/
+</span><span class='line'>$ virtualenv venv
+</span><span class='line'>
+</span><span class='line'>#step 2: inherit global installed packages
+</span><span class='line'>$ virtualenv venv --system-site-packages
+</span><span class='line'>
+</span><span class='line'>#step 3: activate
+</span><span class='line'>$ source venv/bin/activate
+</span><span class='line'>
+</span><span class='line'>#step 4: see venv appear at the beginning of your terminal,then we can install the package
+</span><span class='line'>$ pip install &lt;package&gt; #package is installed in venv folder
+</span><span class='line'>
+</span><span class='line'>#step 5: leave the vitual environment
+</span><span class='line'>$ deactivate</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.numpy.org/"><em><strong>Numpy</strong></em></a>, <a href="https://www.scipy.org/"><em><strong>Scipy</strong></em></a> and <a href="https://matplotlib.org/"><em><strong>Matplotlib</strong></em></a> are scientific liberary for Python. They could installed through pip or Homebrew, see <a href="https://www.scipy.org/install.html">here</a>.</p>
+
+<hr />
+
+<p><a name="cpp"></a></p>
+
+<h3><strong>CPlusPlus</strong></h3>
+
+<p>XCode contains c++, and we could also install c++ by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew insall gcc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we can add alias to shell env for compiling files from terminal.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>alias cppcompile='c++ -std=c++11 -stdlib=libc++'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we could run cpp file directly using <code>cppcompile main.cpp</code>.</p>
+
+<hr />
+
+<p><a name="java"></a></p>
+
+<h3><strong>Java</strong></h3>
+
+<p>Go to <a href="http://www.oracle.com/technetwork/java/index.html">Oracle website</a> to download the macOS version of Java and install. Then we could run <code>java -version</code> to check whether it is installed correctly.</p>
+
+<p>And after installing, we should add Java path to env file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export JAVA_HOME="`/usr/libexec/java_home -v 1.8`"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, choose an IDE to start your develop, e.g. <a href="http://www.eclipse.org/">Eclipse</a>.</p>
+
+<hr />
+
+<p><a name="ruby"></a></p>
+
+<h3><strong>Ruby</strong></h3>
+
+<p>Ruby is similar as Python in MacOS. We could install it directly by Homebrew. And we also could use <code>rbenv</code> to install and manage multiple versions of Ruby like <code>pyenv</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install rbenv ruby-build rbenv-default-gems rbenv-gemset #install rbenv
+</span><span class='line'>$ echo 'eval "$(rbenv init -)"' &gt;&gt; &lt;path&gt;/env.sh #init rbenv
+</span><span class='line'>$ source ~/.zshrc             # Apply changes
+</span><span class='line'>
+</span><span class='line'>$ rbenv install 2.1.1 #install
+</span><span class='line'>$ rbenv global 2.1.1  #switch version
+</span><span class='line'>
+</span><span class='line'>$ cd PROJECT_PATH
+</span><span class='line'>$ rbenv local 2.1.1 #define version for specific project.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RubyGems is Ruby package management tool, it should be installed with Ruby. Check by <code>which gem</code>. Usage is shown as below.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem update --system   #update to latest version
+</span><span class='line'>
+</span><span class='line'># install gem package
+</span><span class='line'>$ gem install &lt;gemname&gt;
+</span><span class='line'>$ gem install &lt;gemname&gt; --no-document
+</span><span class='line'>
+</span><span class='line'># check installed packages list and outdated.
+</span><span class='line'>$ gem list
+</span><span class='line'>$ gem outdated
+</span><span class='line'>
+</span><span class='line'>$ gem update [&lt;gemname&gt;]  #update gems
+</span><span class='line'>$ gem cleanup #cleanup old version</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="node"></a></p>
+
+<h3><strong>Node.js</strong></h3>
+
+<p><a href="https://github.com/nodejs/node">Nodejs</a> is an open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side(<a href="https://en.wikipedia.org/wiki/Node.js">wiki</a>). Like Python and Ruby, it also has an version management tool - nvm. We can use it to install and manage versions of Nodejs. Usage shows below.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># install nvm
+</span><span class='line'>$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
+</span><span class='line'>
+</span><span class='line'>$ source ~/.bashrc        # source your bashrc/zshrc to add nvm to PATH
+</span><span class='line'>$ command -v nvm          # check the nvm use message
+</span><span class='line'>$ nvm install node        # install most recent Node stable version
+</span><span class='line'>$ nvm ls                  # list installed Node version
+</span><span class='line'>$ nvm use node            # use stable as current version
+</span><span class='line'>$ nvm ls-remote           # list all the Node versions you can install
+</span><span class='line'>$ nvm alias default node  # set the installed stable version as the default Node</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And nodejs also has its package management tool <code>npm</code>, The usage is like <code>pip</code> for Python and <code>gem</code> for Ruby.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install &lt;package&gt; # Install locally
+</span><span class='line'>$ npm install -g &lt;package&gt; # Install globally
+</span><span class='line'>$ npm install &lt;package&gt; --save
+</span><span class='line'>$ npm list [-g]
+</span><span class='line'>$ npm update [-g] [&lt;package&gt;]
+</span><span class='line'>$ npm uninstall [-g] &lt;package&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="go"></a></p>
+
+<h3><strong>Go</strong></h3>
+
+<p><a href="https://golang.org/">Go</a>&mdash;&lsquo;golang&rsquo; is a programming language created by Google.</p>
+
+<p>We could install it by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install golang</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then config the enviroment by inserting path to <code>env.sh</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export GOPATH=$HOME/go
+</span><span class='line'>export GOROOT=/usr/local/opt/go/libexec
+</span><span class='line'>export PATH=$PATH:$GOPATH/bin
+</span><span class='line'>export PATH=$PATH:$GOROOT/bin</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How to write a simple &ldquo;Hello World&rdquo; program, please refer <a href="https://golang.org/doc/code.html">here</a>.</p>
+
+<p>To import and use package, we will use command <code>go get</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ go get -u github.com/gorilla/mux</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Package using example:</p>
+
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;net/http&quot;</span>
+    <span class="s">&quot;log&quot;</span>
+    <span class="s">&quot;github.com/gorilla/mux&quot;</span> <span class="c1">// Your imported package</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">YourHandler</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Gorilla!\n&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">r</span> <span class="o">:=</span> <span class="nx">mux</span><span class="p">.</span><span class="nx">NewRouter</span><span class="p">()</span>
+    <span class="c1">// Routes consist of a path and a handler function.</span>
+    <span class="nx">r</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="nx">YourHandler</span><span class="p">)</span>
+
+    <span class="c1">// Bind to a port and pass our router in</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8000&quot;</span><span class="p">,</span> <span class="nx">r</span><span class="p">))</span>
+<span class="p">}</span></code></pre></div>
+
+
+<hr />
+
+<p><a name="latex"></a></p>
+
+<h3><strong>Latex</strong></h3>
+
+<p><a href="https://www.latex-project.org/about/">LaTex</a>, which is pronounced &ldquo;Lah-tech&rdquo; or &ldquo;Lay-tech&rdquo;, is a document preparation system for high-quality typesetting. It is not a word processors like Microsoft Word or Apple Pages. It is like a markup language to using kinds of tags or commands to generate a structure of documents.</p>
+
+<p>To install LaTex on MacOS, we could download <a href="http://www.tug.org/mactex/">MacTex</a> installer. It includes additional programs such as an editor and a BibTeX reference manager that help users to work with TeX outside of the command line. But it is big(2G).</p>
+
+<p>Another way is to install <a href="http://www.tug.org/mactex/morepackages.html">BasicTex</a>, only 100M size, but we will be faced with the tasks of installing additional programs and installing missing packages.</p>
+
+<hr />
+
+<p><a name="other"></a></p>
+
+<h3><strong>Others</strong></h3>
+
+<p>About other development tools, for me, I use <a href="https://www.scootersoftware.com/">Beyond Compare</a>, <a href="https://www.mathworks.com/">Matlab</a>, <a href="https://developer.android.com/studio/index.html">Android Studio</a>, <a href="https://www.virtualbox.org/">VisualBox</a>, <a href="https://www.blender.org/">Blender</a> and <a href="http://octopress.org/">Octopress</a> with <a href="https://www.heroku.com/">Heroku</a> for the blog post.</p>
+
+<hr />
+
+<h3><strong>Reference</strong></h3>
+
+<p>&ldquo;MacOS setup guide&rdquo; <a href="http://sourabhbajaj.com/mac-setup/">http://sourabhbajaj.com/mac-setup/</a>  Sourabh Bajaj</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-08T15:49:04+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/12/24/shadowsocks_thinking/" title="Previous Post: 从开源项目Shadowsocks感慨">&laquo; 从开源项目Shadowsocks感慨</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/01/14/jump-game/" title="Next Post: 'Jump' by AI">'Jump' by AI &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

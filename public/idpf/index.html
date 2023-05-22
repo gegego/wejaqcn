@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>IDPF (Ideal driver platform) - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="IDPF (Ideal Driver Platform) IDPF design and develop as printer driver for fujixerox printer devices on Windows os after Windows XP(including &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/idpf">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">IDPF (Ideal Driver Platform)</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-18T13:44:00+01:00" pubdate data-updated="true"></time></p>
+  </header>
+  
+  <p>IDPF design and develop as printer driver for fujixerox printer devices on Windows os after Windows XP(including Windows XP, Vista, 7, server2008). The whole project splits two parts, the plantform part is focus on new feature development. And product part focus on create the collection for the requirements of the real printer device. That means the plantform contains all features of the printers and production chose some features.</p>
+
+<p><img src="/images/uni.png"></p>
+
+<p>As shown as the figure, IDPF is designed based on Microsoft Universal Printer Driver, and the figure shows the structure of the unidiver. Microsoft create a whole workflow from UI to spooler service(output). And Microsoft gives two entries for the user to customize their own driver, UI plug-in module and Render plug-in module. One is define the UI pages and another is define the output contents. Both modules defines COM interface for user and lots of API for the driver functions(refer to <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/print/introduction-to-user-interface-plug-ins">IPrintOemUI</a> and <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/print/iprintoemuni-com-interface">IPrintOemUni</a>).</p>
+
+<p>For us, we design UI plugin with DXD(one script like json), and we make every kind of element(e.g. button, label, textbox, checkbox, radiobutton&hellip;) as a entry of the script, then we dynaimicly run the UI with the script paser. And rendering plugin is mainly moved from the old driver rendering engine which renders the documents or pictures to the pwl (kind of page description language like pcl), and makes a header of commands based on the printer setttings in the output file. The rendering engine of old driver system is implemented by native C, so we implemented the COM object and make connection with the old  rendering engine.</p>
+
+<p>The chanllege of the project is make a balance between flexibility and performance, the platform needs to map to hundreds of products. They have different UI and features. And we also create another script to handle the constraints of UI (e.g. if feature 1 is selected, feature 2 should be disabled). When the elements of UI become huge, there are conficts between constraints. And of course loading and searching of script tree will become slow. We make some solutions to improve the performance, e.g. create index map for the most used features and constraints, and improve the searching algorithm as hybird one. These solutions gives big improvements of the system.</p>
+
+<p>For me, this project is the first large business system which is programming closing to the windows os kernel. It makes me learn lots about Windows Kernel Programming and COM framework at that time. And it also improve my software design knowledge and c++ expeirence.</p>
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-03-18T13:44:00+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

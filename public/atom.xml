@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Jack's Ship]]></title>
+  <link href="http://wejaq.cn/atom.xml" rel="self"/>
+  <link href="http://wejaq.cn/"/>
+  <updated>2023-05-20T16:06:54+02:00</updated>
+  <id>http://wejaq.cn/</id>
+  <author>
+    <name><![CDATA[Jack]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    
+    <title type="html"><![CDATA[reactwebapp]]></title>
+    <link href="http://wejaq.cn/blog/2018/02/21/reactwebapp/"/>
+    
+    <updated>2018-02-21T12:02:39+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/02/21/reactwebapp</id>
+    
+    <content type="html"><![CDATA[<p>wait</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Create Progressive Web App]]></title>
+    <link href="http://wejaq.cn/blog/2018/02/07/progressivewebapp/"/>
+    
+    <updated>2018-02-07T22:04:18+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/02/07/progressivewebapp</id>
+    
+    <content type="html"><![CDATA[<p>Progressive Web Application (PWA) is designed for mobile, starting from Google for Android Chrome and Chrome OS from 2015, and it is not only a shortcuts of url, but also it takes web application benefits and add advanced features to give the experience same as the first-class naive app.</p>
+
+<!-- more -->
+
+
+<p>To transfer your web app or site to a progressive web application is not complicated. <a href="https://developers.google.com/web/progressive-web-apps/checklist">Here</a> is a checklist of PWA. Simply, it only needs some steps.</p>
+
+<ol>
+<li>Designing the layout of web app for mobile resolution.<br /></li>
+<li>Installing ssl certificates on the web server, makes the web app under https.<br /></li>
+<li>Create configration metadata for Add to Home Screen.<br /></li>
+<li>Open web app on mobile browser (Chrome, Firefox, Opera), Add to Home Screen.<br /></li>
+</ol>
+
+
+<p>For designing layout of Mobile, we could create <code>@media (min-width:1200px)</code> nodes in css file to define different css layout for different page size. And of course, we could design specific UI template for Mobile, and at backend, check the browser type from request information, and link to the url for mobile or desktop version.</p>
+
+<p>There are lots of solutions of installing ssl certificates of web server, and it includes some free solutions, e.g. <a href="https://letsencrypt.org/">letsencrypt</a>. Use <a href="https://github.com/certbot/certbot">certbot</a> tools to install the certificates with only some commands.</p>
+
+<p>The easist way to set the metadata is only set <code>&lt;meta name="mobile-web-app-capable" content="yes"&gt;</code> on the main html page. But it is only for Chrome. Other browser e.g. firefox need to define a manifest file <code>manifest.json</code> like, reference is <a href="https://developers.google.com/web/fundamentals/native-hardware/fullscreen/">here</a>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "short_name": "Kinlan's Amaze App",
+</span><span class='line'>  "name": "Kinlan's Amazing Application ++",
+</span><span class='line'>  "icons": [
+</span><span class='line'>    {
+</span><span class='line'>      "src": "launcher-icon-4x.png",
+</span><span class='line'>      "sizes": "192x192",
+</span><span class='line'>      "type": "image/png"
+</span><span class='line'>    }
+</span><span class='line'>  ],
+</span><span class='line'>  "start_url": "/index.html",
+</span><span class='line'>  "display": "standalone",
+</span><span class='line'>  "orientation": "landscape"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After these steps, we could run our web app like a first-class naive app. And if we want to more advanced function, we need to work with the webAPI from different browser offering, moreover it is even possible to create an offline web app by using <a href="https://developers.google.com/web/updates/2016/06/2-cookie-handoff">service workers</a>. <a href="https://developers.google.com/web/">Here</a> is all the things about web app from GOOGLE</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Setup of Production Server with nginx and uwsgi]]></title>
+    <link href="http://wejaq.cn/blog/2018/01/27/settingproductionwebserverfordjango/"/>
+    
+    <updated>2018-01-27T15:16:49+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/01/27/settingproductionwebserverfordjango</id>
+    
+    <content type="html"><![CDATA[<p>These two days, I trid to create a production web server with nginx and uwsgi for django app on a VPS from vultr.com. With the help from some <a href="http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html">atircles</a> from internet, I learn lots of things and finished the work finally.</p>
+
+<!-- more -->
+
+
+<h3>Configuration</h3>
+
+<p>The depolyment work mainly contains some steps.</p>
+
+<p>1, Installing python and pip tools and create vitural enviroments for your projects by virtualenv.</p>
+
+<p>2, Transfering the project deployment space to the VPS, mostly through git or other similar tools.</p>
+
+<p>3, Installing python dependency packages by requirements.txt with command <code>pip install -r requirements.txt</code>, then installing the database and other dependency tools for the project.</p>
+
+<p>4, Initializing the django app like command migrate, collectstatic and so on. Then run the server from django by <code>python manage.py runserver 0.0.0.0:8000</code>, it should be working.</p>
+
+<p>Go to here, I did not meet any problems, everything is fine.</p>
+
+<p>5, Installing <a href="http://uwsgi-docs.readthedocs.io/en/latest/index.html">uwsgi</a>, simply, using <code>uwsgi --http: 8000 --module=project.wsgi</code> to run your project, it wokred like last step. Then, create an config file named <code>project.ini</code> such as <a href="http://uwsgi-docs.readthedocs.io/en/latest/Configuration.html">example</a> to a port or a socket file, and run the server with the config file with <code>uwsgi project.ini</code>. Finally, making the system service file <code>/etc/systemd/system/uwsgi.service</code> as <a href="http://uwsgi-docs.readthedocs.io/en/latest/Systemd.html">here</a>. Finishing all of steps, run service <code>sudo systemctl start uwsgi</code>. However, we cannot check the result after this step if we locate the server to a socket file.</p>
+
+<p>6, Installing <a href="https://www.nginx.com/">nginx</a>, change the config file <code>/etc/nginx/nginx.conf</code> or add a sub config file in <code>/etc/nginx/conf.d/</code>, adding a server node which locate to the port or socket file created by uwsgi server in last step. <a href="http://uwsgi-docs.readthedocs.io/en/latest/Nginx.html">Here</a> are examples. Then run nginx service and check the server from brower. If your app were shown perfectlly, luckly the mission is finished.</p>
+
+<h3>Problems</h3>
+
+<p>If you did not meet any problems in last 2 steps, that means you are so lucky or you unstand the configuration structure very well. Mostly, rookies like me would meet lots of problems during these steps. I will introduce some of cases I met.</p>
+
+<p>Case 1,<br /> <a href="https://stackoverflow.com/questions/16272542/uwsgi-fails-with-no-module-named-encoding-error">Problem</a> about python module not found when running <code>uwsgi project.ini</code>.</p>
+
+<p>It is mainly because that python path setting is not right, the uwsgi tools is from one version of python and the others packages are from another version. Check the enviroment settings of python and virtualenv settings calefully and you could find what is missing. Or reboot the machine, for me, it solved my problem, I think maybe some cache data is not refreshed.</p>
+
+<p>Case 2,<br />
+<a href="https://stackoverflow.com/questions/23863852/no-python-application-found-uwsgi-nginx-ubuntu-13">Problem</a> about no python app found.</p>
+
+<p>It is a project path setting problem, try to put your ini file to the project folder and run again, it should be solved.</p>
+
+<p>Case 3,<br />
+Everything crash when start uwsgi service.</p>
+
+<p>The uwsgi service is using another user session to run, so every enviroment setting of your current user will be losted in the uwsgi service process session. Write some commands in your &lsquo;uwsgi.service&rsquo; file such as <code>export DATABASE_URL=**</code> or <code>source /virtualenv/activate</code>. There is a similar problem to config other service such as crontab.</p>
+
+<p>Case 4,<br />
+File premission for socket file after running nginx.</p>
+
+<p>Add commands to ini file to give high file premission to nginx. like,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chown-socket = nginx
+</span><span class='line'>chmod-socket = 666</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>These are the problems I met, we need to verify each small step during the configuration, because one tiny missing could casue you a lot of time to search it. And the situations between servers are not same, so it is also hard to find the solution directly from the internet. If you do not want to spend time on these troubles, you could use PaaS platform such as <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/appengine/">google app engine</a>, <a href="heroku.com">heroku</a> or <a href="https://www.pythonanywhere.com">pythonanywhere</a>.</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Starting on Heroku]]></title>
+    <link href="http://wejaq.cn/blog/2018/01/21/herokuappstart/"/>
+    
+    <updated>2018-01-21T16:30:11+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/01/21/herokuappstart</id>
+    
+    <content type="html"><![CDATA[<p>Heroku is a cloud platform as a service supporting several programming languages that is used as a web application deployment model. It has been running for 10 years which start from 2007. There are lots of articles to comparing Heroku with other alternative serives, e.g. Amazon Web Sevices, Google App Engine. It maybe not suitable for large bussiness, but Heroku is a good choice of starting your work. Because it offers a real free plan which enough to run a seed web app of different platform and the community is active and helpful which could solve most problems during your work.</p>
+
+<!-- more -->
+
+
+<p>From this article, I will not introduce the basic thing such as what Heroku is, how to setup or how to deployment which you could find all the things from the <a href="https://devcenter.heroku.com/">offical site</a>. I will introduce my experience of using Heroku service, and talk about some problems during the work.</p>
+
+<p>The first work of mine is this <a href="http://octopress.org/">octopress</a> blog. Originally, I have deploy one another blog on the github page whose contents is not about technic. However, I really do not want the blog source code and deployment things as pulic things. And Heroku is another choice from the <a href="http://octopress.org/docs/deploying/heroku/">octopress document</a>. I start to know Heroku offers an unlimited free plan and greate documentation. Although I really have no idea about the limits of the free plan, the important thing is the plan could let you define a custom domain. I can not find other services with this option. Honestly, I don&rsquo;t think that there are people coming to read my articles. These blogs mostly are the notes for myself. Following the article, the deployment is quite fast and happy. The CLI tools is simple, however, the drawback or limit is also because of the CLI tools, all the process and work is hiden behind the tools. This limit is not so obvious for the blog. It is just a static web framework, but I think this limitation will affect the advanced development works.</p>
+
+<p>The second work is a django based web application of video contents with a scraper. The internet is a huge database including everything, so the web scraping technology is becoming basements of other work such as machine learning, computer vision, visualization and data analysis. The idea of application is using a python web scraper to collect the video information from some other web sites and insert them to the local database. And the django app lists these videos on the interface and play them for users. One limitation of Heroku is the development enviroments, I use the python to work, so the Heroku app only contains the python enviroments, if you want run a service or process from another language framework such as ruby or java, it seems no way to do that in one app, you need to create another app to deploy the process to the different platform. In some situation, it is a good thing for managing codes and enviroments. But for a large system, it is a big limitation for development and migration. When an app is designed for Heroku, it would take high efforts to transfer it to another cloud plantform. Another problem is that I cannot install the system tools or liberary and control the app or process. There are a lot of addons to offer you the functions but it is still limited and cost more money. In my case, I need a process to run scraper in duration. The easy solution is to use the Scheduler addon, but the setting of timing is very limited. Or we could use 3rd party scheduler lib to develop the service. However, these things are not problems for small app, and it is really fast to develop and deploy your app without any payment. So I think it is ideal platform to convert an idea to a real app and improve
+it more and more. And when it becomes big, of course you could contiue on Heroku or move to other big platform like Amazon or Google.</p>
+
+<p>Finally, I will list some tips about development on Heroku.</p>
+
+<ol>
+<li><p>Here are two frameworks of django heroku starting project, I used the second one to start my work. The readme file of the project contains how to deployment and development information.<br />
+<a href="https://github.com/heroku/python-getting-started">https://github.com/heroku/python-getting-started</a><br />
+<a href="https://github.com/heroku/heroku-django-template">https://github.com/heroku/heroku-django-template</a></p></li>
+<li><p>Here is a page about setting the postgresql database, and starting project &lsquo;python-getting-started&rsquo; also includes a database example.<br />
+<a href="https://devcenter.heroku.com/articles/heroku-postgresql">https://devcenter.heroku.com/articles/heroku-postgresql</a></p></li>
+<li><p>Scheduler task creation show below.<br />
+<a href="https://devcenter.heroku.com/articles/scheduler">https://devcenter.heroku.com/articles/scheduler</a><br />
+<a href="https://devcenter.heroku.com/articles/clock-processes-python">https://devcenter.heroku.com/articles/clock-processes-python</a></p></li>
+<li><p>About &lsquo;web scraping with python&rsquo;, it is another big topic. Using <a href="https://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> library is a recommended solution, but rendering a dynamic page with javascript sometimes becomes a big chanllege, currently I have not find a good solution for it for my requirements. The details about this topic, the book &lsquo;Web Scraping With Python&rsquo; from Ryan Mitchell is recommended and you can download online.</p></li>
+<li><p>Lastly, I recommend &lsquo;<a href="https://djangosnippets.org">https://djangosnippets.org</a>&rsquo;, it is a very useful site about django web app development which includes lots of codes that could be reused.</p></li>
+</ol>
+
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA['Jump' by AI]]></title>
+    <link href="http://wejaq.cn/blog/2018/01/14/jump-game/"/>
+    
+    <updated>2018-01-14T01:07:40+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/01/14/jump-game</id>
+    
+    <content type="html"><![CDATA[<p>Recently, one friend recommanded me an <a href="https://zhuanlan.zhihu.com/p/32636329">article</a> about using AI to play a popular html5 game on Wechat called &ldquo;Jump&rdquo;. The destination of the game is to make the chessman jump from one table to another by touching the screen with right timing.</p>
+
+<!-- more -->
+
+
+<p><img src="http://wejaq.cn/images/jump/intro.png" width="280"></p>
+
+<p>The basic idea about the solution is shown as below steps.</p>
+
+<ul>
+<li><p><strong>Step 1</strong>: Making a screenshot of the game by using adb tools.</p></li>
+<li><p><strong>Step 2</strong>: Getting chessman&rsquo;s position.</p></li>
+<li><p><strong>Step 3</strong>: Getting target talbe position.</p></li>
+<li><p><strong>Step 4</strong>: Calculate distances between chessman and target table and calculate the timing of the touching.</p></li>
+<li><strong>Step 5</strong>: Sending adb command to finish the jumping.</li>
+</ul>
+
+
+<p>The key challenge is how to get the position of chessman and target table accurately. The article gives 2 solutions.</p>
+
+<p>The <em>first</em> solution is quite simple. It is using traditional template match of multi-scale images based on opencv. <a href="https://www.pyimagesearch.com/2015/01/26/multi-scale-template-matching-using-python-opencv/">Here</a> is an article about details of this methods.</p>
+
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">multi_scale_search</span><span class="p">(</span><span class="n">pivot</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">pivot</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">found</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="nb">range</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="nb">range</span><span class="p">,</span> <span class="n">num</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">resized</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">W</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">H</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">resized</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">resized</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="ow">or</span> <span class="n">resized</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">w</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">resized</span><span class="p">,</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">TM_CCOEFF_NORMED</span><span class="p">)</span>
+
+        <span class="n">loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">res</span> <span class="o">&gt;=</span> <span class="n">res</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+        <span class="n">pos_h</span><span class="p">,</span> <span class="n">pos_w</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">loc</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">found</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">res</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">found</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="p">(</span><span class="n">pos_h</span><span class="p">,</span> <span class="n">pos_w</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">found</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">pos_h</span><span class="p">,</span> <span class="n">pos_w</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">found</span>
+    <span class="n">start_h</span><span class="p">,</span> <span class="n">start_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pos_h</span> <span class="o">*</span> <span class="n">r</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pos_w</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span>
+    <span class="n">end_h</span><span class="p">,</span> <span class="n">end_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">pos_h</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">pos_w</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">start_h</span><span class="p">,</span> <span class="n">start_w</span><span class="p">,</span> <span class="n">end_h</span><span class="p">,</span> <span class="n">end_w</span><span class="p">,</span> <span class="n">score</span><span class="p">]</span></code></pre></div>
+
+
+<p>The <em>second</em> solution is more interesting and worth to learn. It uses a machine learing algorithmn called &ldquo;CNN(Convolutional Neural Networks) Corase-to-Fine&rdquo; to search the position of target table. <a href="http://ieeexplore.ieee.org/document/7280542/">Here</a> is an article about this aglorithmn using on image classification. However, from the code, I found they are different definitions. The game&rsquo;s searching aglorithmn is not so complicated as the one in article. It is just using 2 layer CNN models, one called &ldquo;coarse&rdquo; for searching an approximate postion of target table and use it to create an 320*320 cropping image of the target table, and using &ldquo;fine&rdquo; model to search this cropping image to get a accurate position of center of target table. About CNN&rsquo;s introduction and implimentation by TensorFlow, please read <a href="https://www.tensorflow.org/tutorials/layers">here</a>.</p>
+
+<p>Comparing this two solutions, the first is easy to understand and implimentation, but the 2nd one is more accurate and faster. And it is also an good example to learn about the development of machine learning and computer vision by Python, opencv and TensorFlow.</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[Introduction of development tools of MacOS]]></title>
+    <link href="http://wejaq.cn/blog/2018/01/08/macos-env/"/>
+    
+    <updated>2018-01-08T15:49:04+01:00</updated>
+    <id>http://wejaq.cn/blog/2018/01/08/macos-env</id>
+    
+    <content type="html"><![CDATA[<p>Until now I have used the mac os for 3 years, but I never learn about the relative development things of Mac os. In this articles, I will take introduction about some tools for the developer on Mac. The main contents are from the<a href="http://sourabhbajaj.com/mac-setup/"> macOS setup Guide</a> from <a href="http://sourabhbajaj.com/">Sourabh</a>. It is very suitable for the rookie like me.</p>
+
+<!-- more -->
+
+
+<h2>Table of Contents</h2>
+
+<ol>
+<li><a href="#xcode">XCode</a></li>
+<li><a href="#homebrew">Homebrew</a></li>
+<li><a href="#iterm">iTerm2</a></li>
+<li><a href="#zsh">Zsh</a></li>
+<li><a href="#git">Git</a></li>
+<li><a href="#atom">Atom</a></li>
+<li><a href="#python">Python</a></li>
+<li><a href="#cpp">CPlusPlus</a></li>
+<li><a href="#java">Java</a></li>
+<li><a href="#scala">Scala</a></li>
+<li><a href="#ruby">Ruby</a></li>
+<li><a href="#node">Node.js</a></li>
+<li><a href="#go">Go</a></li>
+<li><a href="#latex">Latex</a></li>
+<li><a href="#other">Others</a></li>
+</ol>
+
+
+<hr />
+
+<p><a name="xcode"></a></p>
+
+<h3><strong>XCode</strong></h3>
+
+<p>Xcode is an development environment of Apple os system, like Visual Stdio of Microsoft. The whole thing could be downloaded and installed from App Store or offical site of Apple. And Xcode command line tools could be installed by command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ xcode-select --install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is a package of shell command tools for Mac OS development, many things is dependent on it.</p>
+
+<hr />
+
+<p><a name="homebrew"></a></p>
+
+<h3><strong>Homebrew</strong></h3>
+
+<p>Homebrew is a package manager for macOS which help developer install and uninstall many important development tools.</p>
+
+<p>To install Homebrew by running command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Usage</strong></h4>
+
+<p>To install a package:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install &lt;formula&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To update packages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew update</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To see the package list need to be updated</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew outdated</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To update a package:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew upgrade &lt;formular&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To remove packages of old version:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew cleanup</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To see the installed package list with version number:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew list --versions
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="iterm"></a></p>
+
+<h3><strong>ITerm2</strong></h3>
+
+<p>iTerm2 is a great replacement for Apple&rsquo;s Terminal. It is highly customizable and includes many useful features.</p>
+
+<p>There are 2 ways to Install iTerm2. First, The <a href="http://www.iterm2.com/">official website</a> offer the installer. And we also could install it by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew cask install iterm2</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Customization</strong></h4>
+
+<p>We can define color, font, size, hotkeys for the iTerm2, and also there are many 3rd party resources from internet.</p>
+
+<ul>
+<li><a href="https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/schemes">Color schemes</a></li>
+<li><a href="https://github.com/adobe-fonts">Fonts</a></li>
+</ul>
+
+
+<hr />
+
+<p><a name="zsh"></a></p>
+
+<h3><strong>Zsh</strong></h3>
+
+<p>The Z shell (Zsh) is a Unix shell that can be used as an interactive login shell and as a powerful command interpreter for shell scripting(<a href="https://en.wikipedia.org/wiki/Z_shell">Wiki</a>). There are a lot of articles to compare Zsh with Bash (Apple&rsquo;s original shell). e.g. <a href="https://sunlightmedia.org/bash-vs-zsh/">Bash vs Zsh: A comparison of two command line shells</a> by Nicholas Morera.</p>
+
+<p>To install Zsh and <a href="https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org">zsh-completions</a> by Homebrew:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install zsh zsh-completions</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, we can customize the zsh by the framework <a href="https://github.com/robbyrussell/oh-my-zsh"><em>Oh My Zsh</em></a>, to install it by curl command.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re still in the default shell, change default shell to zsh manually:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ chsh -s /usr/local/bin/zsh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Configure <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-plugins">plugins</a> and <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes">theme</a> of zsh by editing ~/.zshrc file. (refer the <a href="https://github.com/robbyrussell/oh-my-zsh/wiki">wiki</a>)</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ZSH_THEME="robbyrussell"
+</span><span class='line'>plugins=(
+</span><span class='line'>  git
+</span><span class='line'>  bundler
+</span><span class='line'>  dotenv
+</span><span class='line'>  osx
+</span><span class='line'>  rake
+</span><span class='line'>  rbenv
+</span><span class='line'>  ruby
+</span><span class='line'>)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we can create a setting file such as <code>env.sh</code> to make some pre-defined settings, And add it to <code>.zshrc</code> with <code>source &lt;envpath&gt;/env.sh</code>. One config template (<a href="http://sourabhbajaj.com/mac-setup/iTerm/zsh.html">Ref</a>) is like:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/zsh</span>
+
+<span class="c"># PATH</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin&quot;</span>
+<span class="nb">export </span><span class="nv">EDITOR</span><span class="o">=</span><span class="s1">&#39;subl -w&#39;</span>
+<span class="c"># export PYTHONPATH=$PYTHONPATH</span>
+<span class="c"># export MANPATH=&quot;/usr/local/man:$MANPATH&quot;</span>
+
+<span class="c"># Virtual Environment</span>
+<span class="nb">export </span><span class="nv">WORKON_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/.virtualenvs
+<span class="nb">export </span><span class="nv">PROJECT_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/projects
+<span class="nb">source</span> /usr/local/bin/virtualenvwrapper.sh
+
+<span class="c"># Owner</span>
+<span class="nb">export </span><span class="nv">USER_NAME</span><span class="o">=</span><span class="s2">&quot;YOUR NAME&quot;</span>
+<span class="nb">eval</span> <span class="s2">&quot;$(rbenv init -)&quot;</span>
+
+<span class="c"># FileSearch</span>
+<span class="k">function</span> f<span class="o">()</span> <span class="o">{</span> find . -iname <span class="s2">&quot;*$1*&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">2</span><span class="k">}</span> <span class="o">}</span>
+<span class="k">function</span> r<span class="o">()</span> <span class="o">{</span> grep <span class="s2">&quot;$1&quot;</span> <span class="k">${</span><span class="p">@:</span><span class="nv">2</span><span class="k">}</span> -R . <span class="o">}</span>
+
+<span class="c">#mkdir and cd</span>
+<span class="k">function</span> mkcd<span class="o">()</span> <span class="o">{</span> mkdir -p <span class="s2">&quot;$@&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="s2">&quot;$_&quot;</span><span class="p">;</span> <span class="o">}</span>
+
+<span class="c">#Aliases</span>
+<span class="nb">alias </span><span class="nv">cppcompile</span><span class="o">=</span><span class="s1">&#39;c++ -std=c++11 -stdlib=libc++&#39;</span>
+
+<span class="c"># Use sublimetext for editing config files</span>
+<span class="nb">alias </span><span class="nv">zshconfig</span><span class="o">=</span><span class="s2">&quot;subl ~/.zshrc&quot;</span>
+<span class="nb">alias </span><span class="nv">envconfig</span><span class="o">=</span><span class="s2">&quot;subl ~/projects/config/env.sh&quot;</span></code></pre></div>
+
+
+<hr />
+
+<p><a name="git"></a></p>
+
+<h3><strong>Git</strong></h3>
+
+<p>Git is most important version management tools for any developer. It is hard to image anyone do works without it.</p>
+
+<p>To install it by Homebrew:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then define the user of Github:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git config --global user.name "Your Name Here"
+</span><span class='line'>$ git config --global user.email "your_email@youremail.com"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And config the SSH connection is nessceary for us, following the steps from <a href="https://help.github.com/articles/connecting-to-github-with-ssh/">here</a> to generate the ssh key and upload it to Github.</p>
+
+<p>For the ignore some file out of mangement by git, we shall create the file <code>~/.gitignore</code> to setting the files (e.g. <code>.DS_Store</code>) not be tracked. One template could be found <a href="https://github.com/github/gitignore/blob/master/Global/macOS.gitignore">here</a>.</p>
+
+<p>For configring the diff and merge tool (e.g. <a href="https://www.scootersoftware.com/index.php">Beyond Compare</a>) by commands:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global diff.tool bc3
+</span><span class='line'>git config --global difftool.bc3.trustExitCode true
+</span><span class='line'>
+</span><span class='line'>git config --global merge.tool bc3
+</span><span class='line'>git config --global mergetool.bc3.trustExitCode true</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="atom"></a></p>
+
+<h3><strong>ATOM</strong></h3>
+
+<p>There are huge amounts of editors or IDE in MACOS, e.g. VIM, Sublime, JetBrains and so on. In this article, I will introduction <a href="https://atom.io/">ATOM Editor</a>. We can download the install fom macOS, linux and windows from its official site.</p>
+
+<p>It is a highly customizable editor based on Electron, a framework that enables cross-platform desktop applications using Chromium and Node.js(<a href="https://en.wikipedia.org/wiki/Atom_(text_editor">ref</a>)). A lot of resources about themes and plugings could be used to support what language you develop.</p>
+
+<p>And we can create a symlink of atom if it exists for using it from command line directly. Then we can use <code>atom file</code> and <code>atom folder</code> to open relatived file and folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="python"></a></p>
+
+<h3><strong>Python</strong></h3>
+
+<p>From this part, we will introduce some program languages setting-up on MacOS including <em>python, c++, Java, Scala, Ruby, Nodejs, Go</em> and <em>Latex</em>.</p>
+
+<p>macOS already includes python, but we do not mess with the system Python, so we need install our own versions. The first way is that you can install Python by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install python</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another way is to use pyenv which could help you to manage multiple versions of Python (e.g. 2.x and 3.x). It works like rbenv for Ruby. First, we must install pyenv by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install pyenv</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After installing, we should add &lsquo;pyenv init&rsquo; to the shell to enable shims and autocompletion.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ echo 'eval "$(pyenv init -)"' &gt;&gt; &lt;env folder&gt;/env.sh</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart shell to reload the settings, then we can start to use pyenv.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ exec $SHELL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important commands are listed following with comments:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pyenv install --list      ##list all avaliable versions of Python
+</span><span class='line'>
+</span><span class='line'>$ pyenv install 2.7.12      ##install version 2.7.12
+</span><span class='line'>$ pyenv install 3.5.2       ##install version 3.5.2
+</span><span class='line'>$ pyenv rehash              ##Rehash pyenv shims (after install)
+</span><span class='line'>
+</span><span class='line'>$ pyenv global 2.7.12 3.5.2 ##set version oder, 2.7.12 before 3.5.2
+</span><span class='line'>
+</span><span class='line'>$ pyenv versions            ##see the versions of python installed
+</span><span class='line'>  system (set by /Users/your_account/.pyenv/version)
+</span><span class='line'>* 2.7.12
+</span><span class='line'>* 3.5.2
+</span><span class='line'>
+</span><span class='line'>$ cd path/to/directory
+</span><span class='line'>$ pyenv local 3.5.2       #set the python version to specific folder</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><strong>Tools</strong></h4>
+
+<p><strong><em>pip</em></strong> is important for developer to install and manage python packages:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install &lt;package&gt;   #install package
+</span><span class='line'>$ pip install --upgrade &lt;package&gt;   #update package
+</span><span class='line'>$ pip freeze    #list installed packages
+</span><span class='line'>$ pip uninstall &lt;package&gt;   #uninstall package</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em><strong>Virtualenv</strong></em> is a tool which create an isolated Python enviroment for each of your projects.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ pip install virtualenv  #install
+</span><span class='line'>
+</span><span class='line'>#step 1: setup virtualenv to the project
+</span><span class='line'>$ cd myproject/
+</span><span class='line'>$ virtualenv venv
+</span><span class='line'>
+</span><span class='line'>#step 2: inherit global installed packages
+</span><span class='line'>$ virtualenv venv --system-site-packages
+</span><span class='line'>
+</span><span class='line'>#step 3: activate
+</span><span class='line'>$ source venv/bin/activate
+</span><span class='line'>
+</span><span class='line'>#step 4: see venv appear at the beginning of your terminal,then we can install the package
+</span><span class='line'>$ pip install &lt;package&gt; #package is installed in venv folder
+</span><span class='line'>
+</span><span class='line'>#step 5: leave the vitual environment
+</span><span class='line'>$ deactivate</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.numpy.org/"><em><strong>Numpy</strong></em></a>, <a href="https://www.scipy.org/"><em><strong>Scipy</strong></em></a> and <a href="https://matplotlib.org/"><em><strong>Matplotlib</strong></em></a> are scientific liberary for Python. They could installed through pip or Homebrew, see <a href="https://www.scipy.org/install.html">here</a>.</p>
+
+<hr />
+
+<p><a name="cpp"></a></p>
+
+<h3><strong>CPlusPlus</strong></h3>
+
+<p>XCode contains c++, and we could also install c++ by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew insall gcc</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we can add alias to shell env for compiling files from terminal.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>alias cppcompile='c++ -std=c++11 -stdlib=libc++'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we could run cpp file directly using <code>cppcompile main.cpp</code>.</p>
+
+<hr />
+
+<p><a name="java"></a></p>
+
+<h3><strong>Java</strong></h3>
+
+<p>Go to <a href="http://www.oracle.com/technetwork/java/index.html">Oracle website</a> to download the macOS version of Java and install. Then we could run <code>java -version</code> to check whether it is installed correctly.</p>
+
+<p>And after installing, we should add Java path to env file.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export JAVA_HOME="`/usr/libexec/java_home -v 1.8`"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, choose an IDE to start your develop, e.g. <a href="http://www.eclipse.org/">Eclipse</a>.</p>
+
+<hr />
+
+<p><a name="ruby"></a></p>
+
+<h3><strong>Ruby</strong></h3>
+
+<p>Ruby is similar as Python in MacOS. We could install it directly by Homebrew. And we also could use <code>rbenv</code> to install and manage multiple versions of Ruby like <code>pyenv</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install rbenv ruby-build rbenv-default-gems rbenv-gemset #install rbenv
+</span><span class='line'>$ echo 'eval "$(rbenv init -)"' &gt;&gt; &lt;path&gt;/env.sh #init rbenv
+</span><span class='line'>$ source ~/.zshrc             # Apply changes
+</span><span class='line'>
+</span><span class='line'>$ rbenv install 2.1.1 #install
+</span><span class='line'>$ rbenv global 2.1.1  #switch version
+</span><span class='line'>
+</span><span class='line'>$ cd PROJECT_PATH
+</span><span class='line'>$ rbenv local 2.1.1 #define version for specific project.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RubyGems is Ruby package management tool, it should be installed with Ruby. Check by <code>which gem</code>. Usage is shown as below.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ gem update --system   #update to latest version
+</span><span class='line'>
+</span><span class='line'># install gem package
+</span><span class='line'>$ gem install &lt;gemname&gt;
+</span><span class='line'>$ gem install &lt;gemname&gt; --no-document
+</span><span class='line'>
+</span><span class='line'># check installed packages list and outdated.
+</span><span class='line'>$ gem list
+</span><span class='line'>$ gem outdated
+</span><span class='line'>
+</span><span class='line'>$ gem update [&lt;gemname&gt;]  #update gems
+</span><span class='line'>$ gem cleanup #cleanup old version</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="node"></a></p>
+
+<h3><strong>Node.js</strong></h3>
+
+<p><a href="https://github.com/nodejs/node">Nodejs</a> is an open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side(<a href="https://en.wikipedia.org/wiki/Node.js">wiki</a>). Like Python and Ruby, it also has an version management tool - nvm. We can use it to install and manage versions of Nodejs. Usage shows below.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># install nvm
+</span><span class='line'>$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
+</span><span class='line'>
+</span><span class='line'>$ source ~/.bashrc        # source your bashrc/zshrc to add nvm to PATH
+</span><span class='line'>$ command -v nvm          # check the nvm use message
+</span><span class='line'>$ nvm install node        # install most recent Node stable version
+</span><span class='line'>$ nvm ls                  # list installed Node version
+</span><span class='line'>$ nvm use node            # use stable as current version
+</span><span class='line'>$ nvm ls-remote           # list all the Node versions you can install
+</span><span class='line'>$ nvm alias default node  # set the installed stable version as the default Node</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And nodejs also has its package management tool <code>npm</code>, The usage is like <code>pip</code> for Python and <code>gem</code> for Ruby.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install &lt;package&gt; # Install locally
+</span><span class='line'>$ npm install -g &lt;package&gt; # Install globally
+</span><span class='line'>$ npm install &lt;package&gt; --save
+</span><span class='line'>$ npm list [-g]
+</span><span class='line'>$ npm update [-g] [&lt;package&gt;]
+</span><span class='line'>$ npm uninstall [-g] &lt;package&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><a name="go"></a></p>
+
+<h3><strong>Go</strong></h3>
+
+<p><a href="https://golang.org/">Go</a>&mdash;&lsquo;golang&rsquo; is a programming language created by Google.</p>
+
+<p>We could install it by Homebrew.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install golang</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then config the enviroment by inserting path to <code>env.sh</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export GOPATH=$HOME/go
+</span><span class='line'>export GOROOT=/usr/local/opt/go/libexec
+</span><span class='line'>export PATH=$PATH:$GOPATH/bin
+</span><span class='line'>export PATH=$PATH:$GOROOT/bin</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How to write a simple &ldquo;Hello World&rdquo; program, please refer <a href="https://golang.org/doc/code.html">here</a>.</p>
+
+<p>To import and use package, we will use command <code>go get</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ go get -u github.com/gorilla/mux</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Package using example:</p>
+
+<div class="highlight"><pre><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&quot;net/http&quot;</span>
+    <span class="s">&quot;log&quot;</span>
+    <span class="s">&quot;github.com/gorilla/mux&quot;</span> <span class="c1">// Your imported package</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nx">YourHandler</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Gorilla!\n&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">r</span> <span class="o">:=</span> <span class="nx">mux</span><span class="p">.</span><span class="nx">NewRouter</span><span class="p">()</span>
+    <span class="c1">// Routes consist of a path and a handler function.</span>
+    <span class="nx">r</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span> <span class="nx">YourHandler</span><span class="p">)</span>
+
+    <span class="c1">// Bind to a port and pass our router in</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8000&quot;</span><span class="p">,</span> <span class="nx">r</span><span class="p">))</span>
+<span class="p">}</span></code></pre></div>
+
+
+<hr />
+
+<p><a name="latex"></a></p>
+
+<h3><strong>Latex</strong></h3>
+
+<p><a href="https://www.latex-project.org/about/">LaTex</a>, which is pronounced &ldquo;Lah-tech&rdquo; or &ldquo;Lay-tech&rdquo;, is a document preparation system for high-quality typesetting. It is not a word processors like Microsoft Word or Apple Pages. It is like a markup language to using kinds of tags or commands to generate a structure of documents.</p>
+
+<p>To install LaTex on MacOS, we could download <a href="http://www.tug.org/mactex/">MacTex</a> installer. It includes additional programs such as an editor and a BibTeX reference manager that help users to work with TeX outside of the command line. But it is big(2G).</p>
+
+<p>Another way is to install <a href="http://www.tug.org/mactex/morepackages.html">BasicTex</a>, only 100M size, but we will be faced with the tasks of installing additional programs and installing missing packages.</p>
+
+<hr />
+
+<p><a name="other"></a></p>
+
+<h3><strong>Others</strong></h3>
+
+<p>About other development tools, for me, I use <a href="https://www.scootersoftware.com/">Beyond Compare</a>, <a href="https://www.mathworks.com/">Matlab</a>, <a href="https://developer.android.com/studio/index.html">Android Studio</a>, <a href="https://www.virtualbox.org/">VisualBox</a>, <a href="https://www.blender.org/">Blender</a> and <a href="http://octopress.org/">Octopress</a> with <a href="https://www.heroku.com/">Heroku</a> for the blog post.</p>
+
+<hr />
+
+<h3><strong>Reference</strong></h3>
+
+<p>&ldquo;MacOS setup guide&rdquo; <a href="http://sourabhbajaj.com/mac-setup/">http://sourabhbajaj.com/mac-setup/</a>  Sourabh Bajaj</p>
+]]></content>
+    
+  </entry>
+  
+  <entry>
+    
+    <title type="html"><![CDATA[从开源项目Shadowsocks感慨]]></title>
+    <link href="http://wejaq.cn/blog/2017/12/24/shadowsocks_thinking/"/>
+    
+    <updated>2017-12-24T00:04:30+01:00</updated>
+    <id>http://wejaq.cn/blog/2017/12/24/shadowsocks_thinking</id>
+    
+    <content type="html"><![CDATA[<p>最近国内的vpn监管变得更加严格了，用了很久的vpncup也挂掉了，相关服务商基本都进去喝茶了。不得不开始研究一下自建方案，无意间发现了shadowsocks这个开源项目,并看到了国内码农们与gfw抗争的一段心酸的历史。</p>
+
+<!-- more -->
+
+
+<p>根据文章<a href="https://chinadigitaltimes.net/chinese/2016/08/gfw-blog%EF%BD%9Cshadowsocks-%E7%9A%84%E5%89%8D%E4%B8%96%E5%90%8E%E7%94%9F/">https://chinadigitaltimes.net/chinese/2016/08/gfw-blog%EF%BD%9Cshadowsocks-%E7%9A%84%E5%89%8D%E4%B8%96%E5%90%8E%E7%94%9F/</a></p>
+
+<p>shadowsocks一开始是由@Clowwindy所写的一个带加密的sock5代理，加密算法是直接调用了openssl的实现，算是一个比较简易的代理服务，由于中间通过了openssl的加密，提高了gfw识别以及屏蔽的难度。比较一般的网络代理更加安全稳定，同时相比vpn来说又提高了部署的便捷性，所以一时间成为了翻墙的利器，同时也被大量的网络投机服务商拿来赚取暴利,导致很快被政府盯上，传出作者被叫去喝茶，并且连夜删除了在github上的所有代码，并在社区销声匿迹，真是佩服天朝的手腕。</p>
+
+<p>不过网络就是这样，既然已经传开了，再要制止住已经是一件不可能的事了，尤其是码农这个群体，本质上所有码农都有一颗黑客的心。政府的强势干预造成了更加强烈的反弹，开源社区自行维护的shadowsocks各种版本不计其数，周边的衍生辅助工具也层出不穷。</p>
+
+<p>在vps上顺利的部署好代理服务后，正好打算利用最近空闲的时间学习一下shadowsocks整个产品链代码，其中包括原始的python版本，go版本，看看能不能移植到一些国外便宜的云服务上，例如Heroku，google，amazon之类的，也为光荣的翻墙事业尽点力。</p>
+]]></content>
+    
+  </entry>
+  
+</feed>

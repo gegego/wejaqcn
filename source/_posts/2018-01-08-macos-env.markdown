@@ -1,0 +1,394 @@
+---
+layout: post
+title: "Introduction of development tools of MacOS"
+date: 2018-01-08 15:49:04 +0100
+comments: true
+categories:
+---
+Until now I have used the mac os for 3 years, but I never learn about the relative development things of Mac os. In this articles, I will take introduction about some tools for the developer on Mac. The main contents are from the[ macOS setup Guide](http://sourabhbajaj.com/mac-setup/) from [Sourabh](http://sourabhbajaj.com/). It is very suitable for the rookie like me.
+<!-- more -->
+
+Table of Contents
+--
+1. [XCode](#xcode)
+2. [Homebrew](#homebrew)
+3. [iTerm2](#iterm)
+4. [Zsh](#zsh)
+5. [Git](#git)
+6. [Atom](#atom)
+7. [Python](#python)
+8. [CPlusPlus](#cpp)
+9. [Java](#java)
+10. [Scala](#scala)
+11. [Ruby](#ruby)
+12. [Node.js](#node)
+13. [Go](#go)
+14. [Latex](#latex)
+15. [Others](#other)
+
+- - -
+<a name="xcode"></a>
+### **XCode**
+Xcode is an development environment of Apple os system, like Visual Stdio of Microsoft. The whole thing could be downloaded and installed from App Store or offical site of Apple. And Xcode command line tools could be installed by command:
+```
+$ xcode-select --install
+```
+It is a package of shell command tools for Mac OS development, many things is dependent on it.
+- - -
+<a name="homebrew"></a>
+### **Homebrew**
+Homebrew is a package manager for macOS which help developer install and uninstall many important development tools.
+
+To install Homebrew by running command:
+```
+$ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+####**Usage**
+To install a package:
+```
+$ brew install <formula>
+```
+To update packages:
+```
+$ brew update
+```
+To see the package list need to be updated
+```
+$ brew outdated
+```
+To update a package:
+```
+$ brew upgrade <formular>
+```
+To remove packages of old version:
+```
+$ brew cleanup
+```
+To see the installed package list with version number:
+```
+$ brew list --versions
+
+```
+- - -
+<a name="iterm"></a>
+### **ITerm2**
+iTerm2 is a great replacement for Apple's Terminal. It is highly customizable and includes many useful features.
+
+There are 2 ways to Install iTerm2. First, The [official website](http://www.iterm2.com/) offer the installer. And we also could install it by Homebrew.
+```
+$ brew cask install iterm2
+```
+#### **Customization**
+We can define color, font, size, hotkeys for the iTerm2, and also there are many 3rd party resources from internet.
+
+- [Color schemes](https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/schemes)
+- [Fonts](https://github.com/adobe-fonts)
+- - -
+<a name="zsh"></a>
+### **Zsh**
+The Z shell (Zsh) is a Unix shell that can be used as an interactive login shell and as a powerful command interpreter for shell scripting([Wiki](https://en.wikipedia.org/wiki/Z_shell)). There are a lot of articles to compare Zsh with Bash (Apple's original shell). e.g. [Bash vs Zsh: A comparison of two command line shells](https://sunlightmedia.org/bash-vs-zsh/) by Nicholas Morera.
+
+To install Zsh and [zsh-completions](https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org) by Homebrew:
+```
+$ brew install zsh zsh-completions
+```
+Then, we can customize the zsh by the framework [_Oh My Zsh_](https://github.com/robbyrussell/oh-my-zsh), to install it by curl command.
+```
+$ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+```
+If you're still in the default shell, change default shell to zsh manually:
+```
+$ chsh -s /usr/local/bin/zsh
+```
+Configure [plugins](https://github.com/robbyrussell/oh-my-zsh/wiki/External-plugins) and [theme](https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes) of zsh by editing ~/.zshrc file. (refer the [wiki](https://github.com/robbyrussell/oh-my-zsh/wiki))
+```
+ZSH_THEME="robbyrussell"
+plugins=(
+  git
+  bundler
+  dotenv
+  osx
+  rake
+  rbenv
+  ruby
+)
+```
+Finally, we can create a setting file such as `env.sh` to make some pre-defined settings, And add it to `.zshrc` with `source <envpath>/env.sh`. One config template ([Ref](http://sourabhbajaj.com/mac-setup/iTerm/zsh.html)) is like:
+
+{% highlight bash %}
+#!/bin/zsh
+
+# PATH
+export PATH="/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export EDITOR='subl -w'
+# export PYTHONPATH=$PYTHONPATH
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# Virtual Environment
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/projects
+source /usr/local/bin/virtualenvwrapper.sh
+
+# Owner
+export USER_NAME="YOUR NAME"
+eval "$(rbenv init -)"
+
+# FileSearch
+function f() { find . -iname "*$1*" ${@:2} }
+function r() { grep "$1" ${@:2} -R . }
+
+#mkdir and cd
+function mkcd() { mkdir -p "$@" && cd "$_"; }
+
+#Aliases
+alias cppcompile='c++ -std=c++11 -stdlib=libc++'
+
+# Use sublimetext for editing config files
+alias zshconfig="subl ~/.zshrc"
+alias envconfig="subl ~/projects/config/env.sh"
+{% endhighlight %}
+- - -
+<a name="git"></a>
+### **Git**
+Git is most important version management tools for any developer. It is hard to image anyone do works without it.
+
+To install it by Homebrew:
+```
+$ brew install git
+```
+Then define the user of Github:
+```
+$ git config --global user.name "Your Name Here"
+$ git config --global user.email "your_email@youremail.com"
+```
+And config the SSH connection is nessceary for us, following the steps from [here](https://help.github.com/articles/connecting-to-github-with-ssh/) to generate the ssh key and upload it to Github.
+
+For the ignore some file out of mangement by git, we shall create the file `~/.gitignore` to setting the files (e.g. `.DS_Store`) not be tracked. One template could be found [here](https://github.com/github/gitignore/blob/master/Global/macOS.gitignore).
+
+For configring the diff and merge tool (e.g. [Beyond Compare](https://www.scootersoftware.com/index.php)) by commands:
+```
+git config --global diff.tool bc3
+git config --global difftool.bc3.trustExitCode true
+
+git config --global merge.tool bc3
+git config --global mergetool.bc3.trustExitCode true
+```
+- - -
+<a name="atom"></a>
+### **ATOM**
+There are huge amounts of editors or IDE in MACOS, e.g. VIM, Sublime, JetBrains and so on. In this article, I will introduction [ATOM Editor](https://atom.io/). We can download the install fom macOS, linux and windows from its official site.
+
+It is a highly customizable editor based on Electron, a framework that enables cross-platform desktop applications using Chromium and Node.js([ref](https://en.wikipedia.org/wiki/Atom_(text_editor))). A lot of resources about themes and plugings could be used to support what language you develop.
+
+And we can create a symlink of atom if it exists for using it from command line directly. Then we can use `atom file` and `atom folder` to open relatived file and folder.
+```
+ln -s /Applications/Atom.app/Contents/Resources/app/atom.sh /usr/local/bin/atom
+```
+- - -
+<a name="python"></a>
+### **Python**
+From this part, we will introduce some program languages setting-up on MacOS including _python, c++, Java, Scala, Ruby, Nodejs, Go_ and _Latex_.
+
+macOS already includes python, but we do not mess with the system Python, so we need install our own versions. The first way is that you can install Python by Homebrew.
+```
+$ brew install python
+```
+Another way is to use pyenv which could help you to manage multiple versions of Python (e.g. 2.x and 3.x). It works like rbenv for Ruby. First, we must install pyenv by Homebrew.
+```
+$ brew install pyenv
+```
+After installing, we should add 'pyenv init' to the shell to enable shims and autocompletion.
+```
+$ echo 'eval "$(pyenv init -)"' >> <env folder>/env.sh
+```
+Restart shell to reload the settings, then we can start to use pyenv.
+```
+$ exec $SHELL
+```
+The important commands are listed following with comments:
+```
+$ pyenv install --list      ##list all avaliable versions of Python
+
+$ pyenv install 2.7.12      ##install version 2.7.12
+$ pyenv install 3.5.2       ##install version 3.5.2
+$ pyenv rehash              ##Rehash pyenv shims (after install)
+
+$ pyenv global 2.7.12 3.5.2 ##set version oder, 2.7.12 before 3.5.2
+
+$ pyenv versions            ##see the versions of python installed
+  system (set by /Users/your_account/.pyenv/version)
+* 2.7.12
+* 3.5.2
+
+$ cd path/to/directory
+$ pyenv local 3.5.2       #set the python version to specific folder
+```
+#### **Tools**
+**_pip_** is important for developer to install and manage python packages:
+```
+$ pip install <package>   #install package
+$ pip install --upgrade <package>   #update package
+$ pip freeze    #list installed packages
+$ pip uninstall <package>   #uninstall package
+```
+
+_**Virtualenv**_ is a tool which create an isolated Python enviroment for each of your projects.
+```
+$ pip install virtualenv  #install
+
+#step 1: setup virtualenv to the project
+$ cd myproject/
+$ virtualenv venv
+
+#step 2: inherit global installed packages
+$ virtualenv venv --system-site-packages
+
+#step 3: activate
+$ source venv/bin/activate
+
+#step 4: see venv appear at the beginning of your terminal,then we can install the package
+$ pip install <package> #package is installed in venv folder
+
+#step 5: leave the vitual environment
+$ deactivate
+```
+[_**Numpy**_](http://www.numpy.org/), [_**Scipy**_](https://www.scipy.org/) and [_**Matplotlib**_](https://matplotlib.org/) are scientific liberary for Python. They could installed through pip or Homebrew, see [here](https://www.scipy.org/install.html).
+- - -
+<a name="cpp"></a>
+### **CPlusPlus**
+XCode contains c++, and we could also install c++ by Homebrew.
+```
+$ brew insall gcc
+```
+And we can add alias to shell env for compiling files from terminal.
+```
+alias cppcompile='c++ -std=c++11 -stdlib=libc++'
+```
+Then we could run cpp file directly using `cppcompile main.cpp`.
+- - -
+<a name="java"></a>
+### **Java**
+Go to [Oracle website](http://www.oracle.com/technetwork/java/index.html) to download the macOS version of Java and install. Then we could run `java -version` to check whether it is installed correctly.
+
+And after installing, we should add Java path to env file.
+```
+export JAVA_HOME="`/usr/libexec/java_home -v 1.8`"
+```
+Finally, choose an IDE to start your develop, e.g. [Eclipse](http://www.eclipse.org/).
+- - -
+<a name="ruby"></a>
+### **Ruby**
+Ruby is similar as Python in MacOS. We could install it directly by Homebrew. And we also could use `rbenv` to install and manage multiple versions of Ruby like `pyenv`.
+```
+$ brew install rbenv ruby-build rbenv-default-gems rbenv-gemset #install rbenv
+$ echo 'eval "$(rbenv init -)"' >> <path>/env.sh #init rbenv
+$ source ~/.zshrc             # Apply changes
+
+$ rbenv install 2.1.1 #install
+$ rbenv global 2.1.1  #switch version
+
+$ cd PROJECT_PATH
+$ rbenv local 2.1.1 #define version for specific project.
+```
+
+RubyGems is Ruby package management tool, it should be installed with Ruby. Check by `which gem`. Usage is shown as below.
+```
+$ gem update --system   #update to latest version
+
+# install gem package
+$ gem install <gemname>
+$ gem install <gemname> --no-document
+
+# check installed packages list and outdated.
+$ gem list
+$ gem outdated
+
+$ gem update [<gemname>]  #update gems
+$ gem cleanup #cleanup old version
+```
+- - -
+<a name="node"></a>
+### **Node.js**
+[Nodejs](https://github.com/nodejs/node) is an open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side([wiki](https://en.wikipedia.org/wiki/Node.js)). Like Python and Ruby, it also has an version management tool - nvm. We can use it to install and manage versions of Nodejs. Usage shows below.
+```
+# install nvm
+$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.1/install.sh | bash
+
+$ source ~/.bashrc        # source your bashrc/zshrc to add nvm to PATH
+$ command -v nvm          # check the nvm use message
+$ nvm install node        # install most recent Node stable version
+$ nvm ls                  # list installed Node version
+$ nvm use node            # use stable as current version
+$ nvm ls-remote           # list all the Node versions you can install
+$ nvm alias default node  # set the installed stable version as the default Node
+```
+And nodejs also has its package management tool `npm`, The usage is like `pip` for Python and `gem` for Ruby.
+```
+$ npm install <package> # Install locally
+$ npm install -g <package> # Install globally
+$ npm install <package> --save
+$ npm list [-g]
+$ npm update [-g] [<package>]
+$ npm uninstall [-g] <package>
+```
+- - -
+<a name="go"></a>
+### **Go**
+[Go](https://golang.org/)---'golang' is a programming language created by Google.
+
+We could install it by Homebrew.
+```
+$ brew install golang
+```
+Then config the enviroment by inserting path to `env.sh`
+```
+export GOPATH=$HOME/go
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+```
+How to write a simple "Hello World" program, please refer [here](https://golang.org/doc/code.html).
+
+To import and use package, we will use command `go get`.
+```
+$ go get -u github.com/gorilla/mux
+```
+Package using example:
+
+{% highlight go %}
+package main
+
+import (
+    "net/http"
+    "log"
+    "github.com/gorilla/mux" // Your imported package
+)
+
+func YourHandler(w http.ResponseWriter, r *http.Request) {
+    w.Write([]byte("Gorilla!\n"))
+}
+
+func main() {
+    r := mux.NewRouter()
+    // Routes consist of a path and a handler function.
+    r.HandleFunc("/", YourHandler)
+
+    // Bind to a port and pass our router in
+    log.Fatal(http.ListenAndServe(":8000", r))
+}
+{% endhighlight %}
+- - -
+<a name="latex"></a>
+### **Latex**
+[LaTex](https://www.latex-project.org/about/), which is pronounced "Lah-tech" or "Lay-tech", is a document preparation system for high-quality typesetting. It is not a word processors like Microsoft Word or Apple Pages. It is like a markup language to using kinds of tags or commands to generate a structure of documents.
+
+To install LaTex on MacOS, we could download [MacTex](http://www.tug.org/mactex/) installer. It includes additional programs such as an editor and a BibTeX reference manager that help users to work with TeX outside of the command line. But it is big(2G).
+
+Another way is to install [BasicTex](http://www.tug.org/mactex/morepackages.html), only 100M size, but we will be faced with the tasks of installing additional programs and installing missing packages.
+- - -
+<a name="other"></a>
+### **Others**
+About other development tools, for me, I use [Beyond Compare](https://www.scootersoftware.com/), [Matlab](https://www.mathworks.com/), [Android Studio](https://developer.android.com/studio/index.html), [VisualBox](https://www.virtualbox.org/), [Blender](https://www.blender.org/) and [Octopress](http://octopress.org/) with [Heroku](https://www.heroku.com/) for the blog post.
+- - -
+### **Reference**
+"MacOS setup guide" http://sourabhbajaj.com/mac-setup/  Sourabh Bajaj

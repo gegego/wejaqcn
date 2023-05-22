@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Create Progressive Web App - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="Progressive Web Application (PWA) is designed for mobile, starting from Google for Android Chrome and Chrome OS from 2015, and it is not only a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/blog/2018/02/07/progressivewebapp">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Create Progressive Web App</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-02-07T22:04:18+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Progressive Web Application (PWA) is designed for mobile, starting from Google for Android Chrome and Chrome OS from 2015, and it is not only a shortcuts of url, but also it takes web application benefits and add advanced features to give the experience same as the first-class naive app.</p>
+
+<!-- more -->
+
+
+<p>To transfer your web app or site to a progressive web application is not complicated. <a href="https://developers.google.com/web/progressive-web-apps/checklist">Here</a> is a checklist of PWA. Simply, it only needs some steps.</p>
+
+<ol>
+<li>Designing the layout of web app for mobile resolution.<br /></li>
+<li>Installing ssl certificates on the web server, makes the web app under https.<br /></li>
+<li>Create configration metadata for Add to Home Screen.<br /></li>
+<li>Open web app on mobile browser (Chrome, Firefox, Opera), Add to Home Screen.<br /></li>
+</ol>
+
+
+<p>For designing layout of Mobile, we could create <code>@media (min-width:1200px)</code> nodes in css file to define different css layout for different page size. And of course, we could design specific UI template for Mobile, and at backend, check the browser type from request information, and link to the url for mobile or desktop version.</p>
+
+<p>There are lots of solutions of installing ssl certificates of web server, and it includes some free solutions, e.g. <a href="https://letsencrypt.org/">letsencrypt</a>. Use <a href="https://github.com/certbot/certbot">certbot</a> tools to install the certificates with only some commands.</p>
+
+<p>The easist way to set the metadata is only set <code>&lt;meta name="mobile-web-app-capable" content="yes"&gt;</code> on the main html page. But it is only for Chrome. Other browser e.g. firefox need to define a manifest file <code>manifest.json</code> like, reference is <a href="https://developers.google.com/web/fundamentals/native-hardware/fullscreen/">here</a>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "short_name": "Kinlan's Amaze App",
+</span><span class='line'>  "name": "Kinlan's Amazing Application ++",
+</span><span class='line'>  "icons": [
+</span><span class='line'>    {
+</span><span class='line'>      "src": "launcher-icon-4x.png",
+</span><span class='line'>      "sizes": "192x192",
+</span><span class='line'>      "type": "image/png"
+</span><span class='line'>    }
+</span><span class='line'>  ],
+</span><span class='line'>  "start_url": "/index.html",
+</span><span class='line'>  "display": "standalone",
+</span><span class='line'>  "orientation": "landscape"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After these steps, we could run our web app like a first-class naive app. And if we want to more advanced function, we need to work with the webAPI from different browser offering, moreover it is even possible to create an offline web app by using <a href="https://developers.google.com/web/updates/2016/06/2-cookie-handoff">service workers</a>. <a href="https://developers.google.com/web/">Here</a> is all the things about web app from GOOGLE</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-02-07T22:04:18+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/01/27/settingproductionwebserverfordjango/" title="Previous Post: Setup of Production Server with nginx and uwsgi">&laquo; Setup of Production Server with nginx and uwsgi</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/02/21/reactwebapp/" title="Next Post: reactwebapp">reactwebapp &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Setup of Production Server with nginx and uwsgi - Jack's Ship</title>
+  <meta name="author" content="Jack">
+
+  
+  <meta name="description" content="These two days, I trid to create a production web server with nginx and uwsgi for django app on a VPS from vultr.com. With the help from some &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://wejaq.cn/blog/2018/01/27/settingproductionwebserverfordjango">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jack's Ship" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">Jack's Ship</a></div>
+
+
+	<br><div class="header-subtitle">The ship will go to every where</div>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <!-- <li><a href="/about">About</a></li> -->
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Setup of Production Server With Nginx and Uwsgi</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-27T15:16:49+01:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>These two days, I trid to create a production web server with nginx and uwsgi for django app on a VPS from vultr.com. With the help from some <a href="http://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html">atircles</a> from internet, I learn lots of things and finished the work finally.</p>
+
+<!-- more -->
+
+
+<h3>Configuration</h3>
+
+<p>The depolyment work mainly contains some steps.</p>
+
+<p>1, Installing python and pip tools and create vitural enviroments for your projects by virtualenv.</p>
+
+<p>2, Transfering the project deployment space to the VPS, mostly through git or other similar tools.</p>
+
+<p>3, Installing python dependency packages by requirements.txt with command <code>pip install -r requirements.txt</code>, then installing the database and other dependency tools for the project.</p>
+
+<p>4, Initializing the django app like command migrate, collectstatic and so on. Then run the server from django by <code>python manage.py runserver 0.0.0.0:8000</code>, it should be working.</p>
+
+<p>Go to here, I did not meet any problems, everything is fine.</p>
+
+<p>5, Installing <a href="http://uwsgi-docs.readthedocs.io/en/latest/index.html">uwsgi</a>, simply, using <code>uwsgi --http: 8000 --module=project.wsgi</code> to run your project, it wokred like last step. Then, create an config file named <code>project.ini</code> such as <a href="http://uwsgi-docs.readthedocs.io/en/latest/Configuration.html">example</a> to a port or a socket file, and run the server with the config file with <code>uwsgi project.ini</code>. Finally, making the system service file <code>/etc/systemd/system/uwsgi.service</code> as <a href="http://uwsgi-docs.readthedocs.io/en/latest/Systemd.html">here</a>. Finishing all of steps, run service <code>sudo systemctl start uwsgi</code>. However, we cannot check the result after this step if we locate the server to a socket file.</p>
+
+<p>6, Installing <a href="https://www.nginx.com/">nginx</a>, change the config file <code>/etc/nginx/nginx.conf</code> or add a sub config file in <code>/etc/nginx/conf.d/</code>, adding a server node which locate to the port or socket file created by uwsgi server in last step. <a href="http://uwsgi-docs.readthedocs.io/en/latest/Nginx.html">Here</a> are examples. Then run nginx service and check the server from brower. If your app were shown perfectlly, luckly the mission is finished.</p>
+
+<h3>Problems</h3>
+
+<p>If you did not meet any problems in last 2 steps, that means you are so lucky or you unstand the configuration structure very well. Mostly, rookies like me would meet lots of problems during these steps. I will introduce some of cases I met.</p>
+
+<p>Case 1,<br /> <a href="https://stackoverflow.com/questions/16272542/uwsgi-fails-with-no-module-named-encoding-error">Problem</a> about python module not found when running <code>uwsgi project.ini</code>.</p>
+
+<p>It is mainly because that python path setting is not right, the uwsgi tools is from one version of python and the others packages are from another version. Check the enviroment settings of python and virtualenv settings calefully and you could find what is missing. Or reboot the machine, for me, it solved my problem, I think maybe some cache data is not refreshed.</p>
+
+<p>Case 2,<br />
+<a href="https://stackoverflow.com/questions/23863852/no-python-application-found-uwsgi-nginx-ubuntu-13">Problem</a> about no python app found.</p>
+
+<p>It is a project path setting problem, try to put your ini file to the project folder and run again, it should be solved.</p>
+
+<p>Case 3,<br />
+Everything crash when start uwsgi service.</p>
+
+<p>The uwsgi service is using another user session to run, so every enviroment setting of your current user will be losted in the uwsgi service process session. Write some commands in your &lsquo;uwsgi.service&rsquo; file such as <code>export DATABASE_URL=**</code> or <code>source /virtualenv/activate</code>. There is a similar problem to config other service such as crontab.</p>
+
+<p>Case 4,<br />
+File premission for socket file after running nginx.</p>
+
+<p>Add commands to ini file to give high file premission to nginx. like,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chown-socket = nginx
+</span><span class='line'>chmod-socket = 666</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>These are the problems I met, we need to verify each small step during the configuration, because one tiny missing could casue you a lot of time to search it. And the situations between servers are not same, so it is also hard to find the solution directly from the internet. If you do not want to spend time on these troubles, you could use PaaS platform such as <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/appengine/">google app engine</a>, <a href="heroku.com">heroku</a> or <a href="https://www.pythonanywhere.com">pythonanywhere</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jack</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-01-27T15:16:49+01:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/01/21/herokuappstart/" title="Previous Post: Starting on Heroku">&laquo; Starting on Heroku</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/02/07/progressivewebapp/" title="Next Post: Create Progressive Web App">Create Progressive Web App &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/02/21/reactwebapp/">reactwebapp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/02/07/progressivewebapp/">Create Progressive Web App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/27/settingproductionwebserverfordjango/">Setup of Production Server with nginx and uwsgi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/21/herokuappstart/">Starting on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/14/jump-game/">'Jump' by AI</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2023 - <a href="mailto:jacky.wejaq@gmail.com">Jack</a><br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+	  Hosted by <a href="http://heroku.com">Heroku</a>. 
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
