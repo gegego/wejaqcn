@@ -100,6 +100,6 @@ google_analytics_tracking_id:
 # Facebook Like
 facebook_like: false
 
-mnml_host_name: Heroku
-mnml_host_url: http://heroku.com
-mnml_mailto: jacky.wejaq@gmail.com
+#mnml_host_name: Heroku
+#mnml_host_url: http://heroku.com
+#mnml_mailto: jacky.wejaq@gmail.com

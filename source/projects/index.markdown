@@ -36,6 +36,6 @@ footer: true
 - [learnMat](https://github.com/gegego/learnMat)
 <br />Machine Learning library implemented by Matlab.
 
-- [Small Games](http://simplejav.org) ([SRC](https://github.com/gegego/SmallGame))
+- [Small Games](http://wengtrain.cn) ([SRC](https://github.com/gegego/SmallGame))
 (including Flood it and Tetris)
 <br />Small games for programming exercise implemented based on Reactjs, [C# .NET Core MVC API](https://docs.microsoft.com/en-us/dotnet/core/) and Flask Restful api.
