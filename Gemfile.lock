@@ -32,6 +32,7 @@ GEM
     faraday-net_http (3.0.2)
     fast-stemmer (1.0.2)
     ffi (1.15.5)
+    ffi (1.15.5-x64-mingw32)
     haml (4.0.7)
       tilt
     jekyll (2.5.3)
@@ -112,6 +113,7 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   RedCloth (~> 4.2.9)
@@ -130,4 +132,4 @@ DEPENDENCIES
   stringex (~> 1.4.0)
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

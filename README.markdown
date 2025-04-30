@@ -43,3 +43,16 @@ THE SOFTWARE IS PROVIDED ‘AS IS’, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 #### If you want to be awesome.
 - Proudly display the 'Powered by Octopress' credit in the footer.
 - [Add your site to the Wiki](https://github.com/imathis/octopress/wiki/Octopress-Sites/_edit) so we can watch the community grow.
+
+#### install in new windows
+install ruby 2.6.10
+install python 2.7.6
+install git 
+
+gem install bundler -v '~>1.17.2'
+
+bundler install
+rake install
+
+install rsync
+
