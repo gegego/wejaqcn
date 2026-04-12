@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: http://wejaq.cn/sitemap.xml 
