@@ -29,6 +29,8 @@ footer: true
 - [Painting Classification](/paclas)
 
 ##Other
+- [LP Bot](/lp_bot) ([SRC](https://github.com/gegego/lp_bot))
+<br /> LP bot based on DLMM meteora, can automatically adjust the pool postion.
 
 - [Single page Webapp](http://loveshow.me/) ([SRC](https://github.com/gegego/LoveStory))
 <br />(This is a prototype of content publication app based on [Reactjs](https://reactjs.org/) as frontend and [flask](http://flask.pocoo.org/) as backend.)
